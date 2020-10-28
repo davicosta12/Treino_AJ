@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <title>pagina de exemplo estrutura basica</title>
+        <meta charset="UTF-8">
+        <meta name="author" content="Davi">
+        <meta name="description" content="Formulário Teste">
+        <meta name="keywords" content="html5, tecnologia, estruturar, melhorar">
+
+        <style>
+            body{
+                font-family: Verdana, Geneva, Tahoma, sans-serif;
+            }
+
+            .clearfix:after{
+                content: ' ';
+                display: block;
+                clear: both;
+            }
+
+            form{
+                width: 50%;
+                margin: 0 auto;
+            }
+
+            form label{
+                display: block;
+                margin-bottom: 25px; 
+                color: black;
+                font-size: 1.2em;
+            }
+
+            .input{
+               display: inline-block;
+               padding: 0.3em 78% 0.3em 0;
+               border: 2.5px solid rgb(92, 91, 91);
+               background-color: #ccc;
+               box-sizing: border-box;
+            }
+
+            .input:focus{
+                background-color: white;
+            }
+
+            .input::placeholder{
+                color: rgb(109, 108, 108);
+                font-weight: bold;
+                font-size: 13.3px;
+            }
+
+            textarea{
+                display: block;
+                padding-right: 64%;
+                font-size: 1.2em;
+                color: black;
+                font-weight: none;
+                border: 2.5px solid rgb(92, 91, 91);
+                background-color: #ccc;  
+            }
+
+            textarea::placeholder{
+                color: rgb(109, 108, 108);
+                font-weight: bold;
+                font-size: 15px;
+            }
+
+            textarea:focus{
+                background-color: white;
+            }
+
+            .label_textarea{
+                margin: 0;
+                padding-right: 100%;
+            }
+
+            .button{
+                display: inline-block;
+                padding: 5px 10px;
+                margin-top: 1em;
+                margin-left: 1em;
+                text-transform: uppercase;
+                color: black;
+                font-weight: bold;   
+                font-size: 1.2em; 
+                letter-spacing: 1.5px;
+                border: 2px solid black;    
+                border-radius: 30px; 
+                box-sizing: border-box;
+                float: right;
+            }
+
+            .button:focus{
+                outline: thin dotted;
+                outline: 0px auto;
+                outline-offset: 0px;
+            }
+
+            #button_salvar{
+                background-color: rgb(20, 162, 228);
+                color: white;
+                transition: all .2s;
+            }
+
+            #button_limpa{
+                background-color: rgb(231, 229, 229);
+                transition: all .2s;
+            
+            }
+
+            #button_limpa:hover{
+                background-color: rgb(212, 212, 212);
+                transform: scale(1.025);
+                cursor: pointer;
+            }
+
+            #button_salvar:hover{
+                background-color: rgb(13, 115, 163);
+                transform: scale(1.025);
+                cursor: pointer;
+            }
+
+
+        </style>
+
+    </head>
+    <body>
+        <form action="#" method="#" class="clearfix">
+            <label>Nome<input type="text" name="nome" id="input_name" class="input " placeholder="Digite seu nome" autofocus></label>
+            <label>Profissão<input type="text" name="profissao" id="input_profission" class="input " placeholder="Digite sua profissão"></label>
+            <label>Email<input type="email" name="email" id="input_email" class="input " placeholder="Digite seu e-mail"></label>
+            <label for="mensagem" class="label_textarea">Observações</label><textarea style="resize: none;" name="msg" id="mensagem" cols="30" rows="10" placeholder="Digite algumas observações" ></textarea></label>
+            <button class="button" id="button_salvar" onclick="Function_salva()">Salvar</button>
+
+            <script>
+                function Function_salva() {
+                alert("Seus registros foram salvos!");
+            }
+            </script>
+
+            <button class="button" id="button_limpa" onclick="Function_limpa()">Limpar</button>
+
+            <script>
+                function Function_limpa() {
+                input.null;
+            }
+            </script>
+        </form>        
+    </body>
+</html>

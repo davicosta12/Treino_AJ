@@ -132,7 +132,7 @@
 
     </head>
     <body>
-        <form action="#" method="#" class="clearfix">
+        <form action="#" method="#" class="clearfix" onsubmit="onSubmit(event)">
             <label>Nome<input type="text" name="nome" id="input_name" class="input all_text_form" placeholder="Digite seu nome" autofocus onkeyup="Escreve_nome()" ></label>
             <div id="output"></div>
             <label>Profissão<input type="text" name="profissao" id="input_profission" class="input all_text_form" placeholder="Digite sua profissão"></label>
@@ -171,6 +171,11 @@
                 let output = document.getElementById("output");
                 for( let i=0; i<x.length; i++) x[i].value = '';    
                 output.innerHTML = x[0].value;
+            }
+            
+            // Fix p/ evitar o refresh da página
+            function onSubmit(event) {
+                event.preventDefault();
             }
 
         </script>

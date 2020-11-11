@@ -12,14 +12,12 @@
                 font-family: Verdana, Geneva, Tahoma, sans-serif;
             }
 
-            .clearfix:after{
-                content: ' ';
-                display: block;
-                clear: both;
+            .formulario{
+
             }
 
-            .all_inputs_form{
-
+            .all_text_form{
+                width: 100%;
             }
 
             form{
@@ -36,8 +34,7 @@
 
             .input{
                display: block;
-               padding-right: 645px;
-               padding: 0.3em 645px 0.3em 0;
+               padding: 0.3em 0 0.3em 0;
                border: 2.5px solid rgb(92, 91, 91);
                background-color: #ccc;
                box-sizing: border-box;
@@ -55,7 +52,6 @@
 
             textarea{
                 display: block;
-                padding-right: 530px;
                 font-size: 1.2em;
                 color: black;
                 font-weight: none;
@@ -75,7 +71,16 @@
 
             .label_textarea{
                 margin: 0;
-                padding-right: 100%;
+            }
+
+            .textarea{
+                box-sizing: border-box;
+            }
+
+            .div-botoes{
+                /*flexbox*/
+                display: flex;
+                flex-direction: row-reverse;
             }
 
             .button{
@@ -91,7 +96,9 @@
                 border: 2px solid black;    
                 border-radius: 30px; 
                 box-sizing: border-box;
-                float: right;
+
+                /*flexbox*/
+                
             }
 
             .button:focus{
@@ -132,14 +139,16 @@
 
     </head>
     <body>
-        <form action="#" method="#" class="clearfix" onsubmit="onSubmit(event)">
+        <form action="#" method="#" class="formulario" onsubmit="onSubmit(event)">
             <label>Nome<input type="text" name="nome" id="input_name" class="input all_text_form" placeholder="Digite seu nome" autofocus onkeyup="Escreve_nome()" ></label>
             <div id="output"></div>
             <label>Profissão<input type="text" name="profissao" id="input_profission" class="input all_text_form" placeholder="Digite sua profissão"></label>
             <label>Email<input type="email" name="email" id="input_email" class="input all_text_form" placeholder="Digite seu e-mail" ></label>
-            <label for="mensagem" class="label_textarea">Observações</label><textarea style="resize: none;" name="msg" id="mensagem" class="all_text_form" cols="30" rows="10" placeholder="Digite algumas observações"></textarea></label>
-            <button class="button" id="button_salvar" onclick="Salva()">Salvar</button>
-            <button class="button" id="button_limpa" onclick="Limpa()">Limpar</button>   
+            <label for="mensagem" class="label_textarea">Observações</label><textarea style="resize: none;" name="msg" id="mensagem" class="textarea all_text_form" cols="30" rows="10" placeholder="Digite algumas observações"></textarea></label>
+            <div class="div-botoes">
+                <button class="button" id="button_salvar" onclick="Salva()">Salvar</button>
+                <button class="button" id="button_limpa" onclick="Limpa()">Limpar</button>
+            </div>     
         </form>        
     </body>
 

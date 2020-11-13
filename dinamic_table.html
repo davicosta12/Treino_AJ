@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <title>pagina de exemplo formulario basico</title>
+        <meta charset="UTF-8">
+        <meta name="author" content="Davi">
+        <meta name="description" content="Formulário Teste">
+        <meta name="keywords" content="html5, tecnologia, estruturar, melhorar">
+
+        <style>
+            body{
+                width: 60%;
+                font-family: Verdana, Geneva, Tahoma, sans-serif;
+                margin: 0 auto;
+            }
+
+            .formulario{
+                margin-top: 1.5em;
+                position: relative;
+                /*FLEXBOX*/
+                display: flex;
+                justify-content: space-between;
+            }
+
+            .formulario label{    
+                display: inline-block   
+            }
+
+            .label-name{
+                margin-left: 0;
+            }
+
+            .label-input{
+                display: block;
+                padding: 0.3em 50px 0.3em 0.3em;
+                border: 2px solid rgb(24, 24, 163);
+                border-radius: 5px;
+            }
+
+            .label-input-age{
+                padding: 0.3em 0.2em 0.3em 0.3em;
+            }
+
+            .div-tabela-button{   
+                position: relative;
+                padding-bottom: 4em;
+                margin-top: 5em;
+            }
+
+            .button{
+                display: inline-block;
+                box-sizing: border-box;
+                padding: 0.3em 0.6em;
+                font-size: 16px;
+                font-weight: bolder;
+                text-transform: uppercase;
+                border: 2px solid black;
+                border-radius: 10px;
+                
+            }
+
+            .button:focus{
+                outline: thin dotted;
+                outline: 0px auto;
+                outline-offset: 0px;
+            }
+
+            .button-add{
+                background-color: rgb(89, 190, 248);
+                color: white;
+                transition: all .2s;
+                /*flex-box*/
+                align-self: flex-end;
+            }
+
+            .button-add:hover{
+                background-color: rgb(13, 115, 163);
+                transform: scale(1.025);
+                cursor: pointer;
+            }
+
+            table{
+                width: 100%;
+            }
+
+            .button-apagar{
+                margin-top: 3em;
+                position: absolute;
+                transition: all .2s;
+                right: 0;
+                bottom: 0;
+                
+            }
+
+            .button-apagar:hover{
+                background-color: rgb(212, 212, 212);
+                transform: scale(1.025);
+                cursor: pointer;
+            }
+
+            table{
+                border-collapse: collapse;
+            }
+
+            .trow-head th{
+                font-size: 1.2em;
+                color: rgba(0, 0, 0, 0.623);
+                background-color: rgb(146, 143, 143);
+                border: 3px solid rgb(26, 76, 105);
+                padding: 1em 5em;
+            }
+
+            #table-body{
+                background: linear-gradient(to top ,white,rgb(146, 143, 143));
+            }
+
+            #table-body tr td {
+                font-size: 1em;
+                color: rgba(0, 0, 0, 0.712);
+                letter-spacing: 1px;
+                border: 3px solid rgb(26, 76, 105);
+                padding: 0.35em 0.50em;
+            }
+
+            #totalizador{
+                position: absolute;
+                bottom: 0;
+                width: 10%;
+                height: 20px;
+                font-size: 1.15em;
+                text-transform: uppercase;
+            }
+
+        </style>
+
+    </head>
+    <body>
+        <form action="#" method="#" class="formulario" onsubmit="onSubmit(event)">
+            <label class="label-name">Nome<input type="text" name="nome" id="input_name" class="label-input" placeholder="Digite seu nome" autofocus></label>
+            <label class="label-age">Idade<input type="number" min="1" max="100" name="idade" id="input_age" class="label-input label-input-age" placeholder="idade"></label>
+            <label>Email<input type="email" name="email" id="input_email" class="label-input" placeholder="Digite seu e-mail" ></label>
+            <button type="button" class="button button-add"  onclick="addItemNaTabela()">Adicionar</button>
+        </form>
+
+        <div class="div-tabela-button">    
+            <table class="table">
+                <thead class="table-head">
+                    <tr class="trow-head">
+                        <th>Nome</th>
+                        <th>Idade</th>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+
+                </tbody>
+            </table>     
+            <button type="button" class="button button-apagar" onclick="LimpaLinha()" onsubmit="onSubmit(event)">Apagar tabela</button> 
+            <div id="totalizador">Total: <span id="span">0</span></div>
+        </div>
+
+        <script>
+            function addItemNaTabela() {
+                var array = new Array;
+                var list_itens = document.getElementsByClassName('label-input');
+
+                for( var i=0; i<list_itens.length; i++ ) {
+                    if( !list_itens[i].value ) {
+                        alert('Preencha todos os campos!');
+                        return 0;
+                    }
+                    array.push(list_itens[i].value);  // Preenche o array com os conteúdos dos inputs
+                }
+
+                if( list_itens[1].value <= 0 || list_itens[1].value > 100) {
+                    alert('Digite valores de 1 a 100!');
+                    return 0;
+                }
+                
+                var table_body = document.getElementById('table-body');
+                table_body.innerHTML += RetornaMensagem(array); // Chama uma função que retorna tr 
+
+
+                /* Chama o contador de tr */
+                ContaNumerolinhas();
+
+                /* Limpa conteudo dos inputs */
+                // LimpaConteudoInput();
+            }
+
+            function RetornaMensagem(array) {
+                var mensagem = '';
+                for( var i=0; i<array.length; i++ ) mensagem += "<td>" + array[i] + "</td>";
+                return mensagem;
+            }
+
+            function ContaNumerolinhas() {
+                var trow_body = document.getElementsByTagName('tr');
+                var contador = document.getElementById('span');
+                contador.textContent = ' ' + trow_body.length -1;
+            }
+
+            /* function LimpaConteudoInput() {
+                var inputs = document.getElementsByClassName('label-input');
+                for( var i=0; i<inputs.length; i++ ) inputs[i].value = '';
+            }
+            */
+
+            function LimpaLinha() {
+                var contador = document.getElementById('span');
+                var table_body = document.getElementById('table-body');      
+                table_body.innerHTML = '';  // Limpa TR 
+                contador.textContent = '0'; // Conteúdo do span volta a ser zero 
+            }
+
+            // Fix p/ evitar o refresh da página
+            function onSubmit(event) {
+                event.preventDefault();
+            } 
+                
+        </script>
+    </body>       
+</html>

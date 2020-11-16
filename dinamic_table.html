@@ -50,7 +50,7 @@
             }
 
             .div-tabela-button{   
-                position: relative;
+                /* position: relative; */
                 padding-bottom: 4em;
                 margin-top: 5em;
             }
@@ -94,11 +94,11 @@
 
             .button-apagar{
                 margin-top: 3em;
-                position: absolute;
-                transition: all .2s;
+                /* position: absolute; 
                 right: 0;
                 bottom: 0;
-                
+                */
+                transition: all .2s;   
             }
 
             .button-apagar:hover{
@@ -128,13 +128,21 @@
             }
 
             #totalizador{
-                position: absolute;
+                /* position: absolute; 
                 bottom: 0;
-                width: 10%;
-                height: 20px;
+                */
                 font-size: 1.15em;
                 text-transform: uppercase;
+
+                /* FLEX-ITEM*/
+                align-self: flex-end;
             }
+
+           #div-botaoEtotalizador{
+               display: flex;
+               justify-content: space-between;
+               flex-direction: row-reverse;
+           } 
 
         </style>
 
@@ -163,8 +171,11 @@
     
                     </tbody>
                 </table>     
-                <button type="button" class="button button-apagar" onclick="LimpaLinha()" onsubmit="onSubmit(event)">Apagar tabela</button> 
-                <div id="totalizador">Total: <span id="span">0</span></div>
+
+                <div id="div-botaoEtotalizador">
+                    <button type="button" class="button button-apagar" onclick="LimpaLinha()" onsubmit="onSubmit(event)">Apagar tabela</button> 
+                    <div id="totalizador">Total: <span id="span">0</span></div>
+                </div>
             </div>
 
         </div>
@@ -231,3 +242,4 @@
         </script>
     </body>       
 </html>
+

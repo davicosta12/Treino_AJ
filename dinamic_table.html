@@ -9,14 +9,22 @@
 
         <style>
             body{
-                width: 60%;
                 font-family: Verdana, Geneva, Tahoma, sans-serif;
-                margin: 0 auto;
+                /* width: 60%; */
+                /* margin: 0 auto; */
+                
+                display: flex;
+                justify-content: center;
+            }
+            
+            .container {
+                width: 60%;
             }
 
             .formulario{
                 margin-top: 1.5em;
-                position: relative;
+                /* position: relative; */
+
                 /*FLEXBOX*/
                 display: flex;
                 justify-content: space-between;
@@ -132,28 +140,33 @@
 
     </head>
     <body>
-        <form action="#" method="#" class="formulario" onsubmit="onSubmit(event)">
-            <label class="label-name">Nome<input type="text" name="nome" id="input_name" class="label-input" placeholder="Digite seu nome" autofocus></label>
-            <label class="label-age">Idade<input type="number" min="1" max="100" name="idade" id="input_age" class="label-input label-input-age" placeholder="idade"></label>
-            <label>Email<input type="email" name="email" id="input_email" class="label-input" placeholder="Digite seu e-mail" ></label>
-            <button type="button" class="button button-add"  onclick="addItemNaTabela()">Adicionar</button>
-        </form>
 
-        <div class="div-tabela-button">    
-            <table class="table">
-                <thead class="table-head">
-                    <tr class="trow-head">
-                        <th>Nome</th>
-                        <th>Idade</th>
-                        <th>Email</th>
-                    </tr>
-                </thead>
-                <tbody id="table-body">
+        <div class="container">
+            
+            <form action="#" method="#" class="formulario" onsubmit="onSubmit(event)">
+                <label class="label-name">Nome<input type="text" name="nome" id="input_name" class="label-input" placeholder="Digite seu nome" autofocus></label>
+                <label class="label-age">Idade<input type="number" min="1" max="100" name="idade" id="input_age" class="label-input label-input-age" placeholder="idade"></label>
+                <label>Email<input type="email" name="email" id="input_email" class="label-input" placeholder="Digite seu e-mail" ></label>
+                <button type="button" class="button button-add"  onclick="addItemNaTabela()">Adicionar</button>
+            </form>
+    
+            <div class="div-tabela-button">    
+                <table class="table">
+                    <thead class="table-head">
+                        <tr class="trow-head">
+                            <th>Nome</th>
+                            <th>Idade</th>
+                            <th>Email</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+    
+                    </tbody>
+                </table>     
+                <button type="button" class="button button-apagar" onclick="LimpaLinha()" onsubmit="onSubmit(event)">Apagar tabela</button> 
+                <div id="totalizador">Total: <span id="span">0</span></div>
+            </div>
 
-                </tbody>
-            </table>     
-            <button type="button" class="button button-apagar" onclick="LimpaLinha()" onsubmit="onSubmit(event)">Apagar tabela</button> 
-            <div id="totalizador">Total: <span id="span">0</span></div>
         </div>
 
         <script>

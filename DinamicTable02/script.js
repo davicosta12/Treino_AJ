@@ -28,8 +28,6 @@
 
         /* Preenche o array com objects (contém os valores dos inputs) e limpa o array global */
         arr.push(Object.assign({}, {codigo: $value_inputs[0].value},{nome: $value_inputs[1].value}, {email: $value_inputs[2].value}));  
-        
-        console.log(arr);
 
         /* Verifica se existe um código parecido nos outros objects */ 
         for (var i=0; i<arr.length - 1; i++) {

@@ -1,0 +1,146 @@
+body{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    /* width: 60%; */
+    /* margin: 0 auto; */
+    
+    display: flex;
+    justify-content: center;
+}
+
+.container {
+    width: 60%;
+}
+
+.formulario{
+    margin-top: 1.5em;
+    /* position: relative; */
+
+    /*FLEXBOX*/
+    display: flex;
+    justify-content: space-between;
+}
+
+.formulario label{    
+    display: inline-block   
+}
+
+.label-name{
+    margin-left: 0;
+}
+
+.label-input{
+    display: block;
+    padding: 0.3em 50px 0.3em 0.3em;
+    border: 2px solid rgb(24, 24, 163);
+    border-radius: 5px;
+}
+
+.label-input-age{
+    padding: 0.3em 0.2em 0.3em 0.3em;
+}
+
+.div-tabela-button{   
+    /* position: relative; */
+    padding-bottom: 4em;
+    margin-top: 5em;
+}
+
+.button{
+    display: inline-block;
+    box-sizing: border-box;
+    padding: 0.3em 0.6em;
+    font-size: 16px;
+    font-weight: bolder;
+    text-transform: uppercase;
+    border: 2px solid black;
+    border-radius: 10px;
+    
+}
+
+.button:focus{
+    outline: thin dotted;
+    outline: 0px auto;
+    outline-offset: 0px;
+}
+
+.button-add{
+    background-color: rgb(89, 190, 248);
+    color: white;
+    transition: all .2s;
+    /*flex-box*/
+    align-self: flex-end;
+}
+
+.button-add:hover{
+    background-color: rgb(13, 115, 163);
+    transform: scale(1.025);
+    cursor: pointer;
+}
+
+table{
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.button-apagar{
+    margin-top: 3em;
+    /* position: absolute; 
+    right: 0;
+    bottom: 0;
+    */
+    transition: all .2s;   
+}
+
+.button-apagar:hover{
+    background-color: rgb(212, 212, 212);
+    transform: scale(1.025);
+    cursor: pointer;
+}
+
+.btnApagaLinha{
+    margin-left: 25%;
+    width: 50%;   
+    padding: 0 3em;
+}
+
+.btnApagaLinha:hover{
+    background-color: rgb(212, 212, 212);
+    transform: scale(1.025);
+    cursor: pointer;
+}
+
+.trow-head th{
+    font-size: 1.2em;
+    color: rgba(0, 0, 0, 0.623);
+    background-color: rgb(146, 143, 143);
+    border: 3px solid rgb(26, 76, 105);
+    padding: 1em 5em;
+}
+
+#table-body tr td {
+    background: rgb(199, 199, 199);
+    font-size: 1em;
+    color: rgba(0, 0, 0, 0.712);
+    letter-spacing: 1px;
+    border: 3px solid rgb(26, 76, 105);
+    padding: 0.35em 0.50em;
+}
+
+#totalizador{
+    /* position: absolute; 
+    bottom: 0;
+    */
+    
+    font-size: 1.15em;
+    text-transform: uppercase;
+
+    /* FLEX-ITEM*/
+    align-self: flex-end;
+}
+
+#div-botaoEtotalizador{
+   display: flex;
+   justify-content: space-between;
+   flex-direction: row-reverse;
+} 
+

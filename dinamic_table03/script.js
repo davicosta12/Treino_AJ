@@ -67,7 +67,7 @@ function retornaMensagem() {
 function escolheARR(event){
     $btn_content = event.target.textContent;
     index_tr = procuraIndexDoArr();
-    apagatr($table_body, index_tr);
+    apagatr();
     filtraArray();
 }
 
@@ -111,3 +111,4 @@ function limpaConteudoInputs() {
 function onSubmit(event) {
     event.preventDefault();
 }  
+

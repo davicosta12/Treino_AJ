@@ -1,0 +1,244 @@
+body{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    /* width: 60%; */
+    /* margin: 0 auto; */
+    
+    display: flex;
+    justify-content: center;
+}
+
+.clearfix:after{
+    content: ' ';
+    display: block;
+    clear: both;
+}
+
+.formulario{
+    margin-top: 1.5em;
+    /* position: relative; */
+
+    /*FLEXBOX*/
+    display: flex;
+    justify-content: space-between;
+}
+
+.formulario label{    
+    display: inline-block   
+}
+
+.label-name{
+    margin-left: 0;
+}
+
+.label-input{
+    display: block;
+    padding: 0.3em 50px 0.3em 0.3em;
+    border: 2px solid rgb(24, 24, 163);
+    border-radius: 5px;
+}
+
+.label-input-age{
+    padding: 0.3em 0.2em 0.3em 0.3em;
+}
+
+.div-tabela-button{   
+    /* position: relative; */
+    padding-bottom: 4em;
+    margin-top: 5em;
+}
+
+.button{
+    display: inline-block;
+    padding: 0.3em 0.6em;
+    font-size: 16px;
+    font-weight: bolder;
+    text-transform: uppercase;
+    border: 2px solid black;
+    border-radius: 10px;  
+    box-sizing: border-box;
+}
+
+.button:focus{
+    outline: thin dotted;
+    outline: 0px auto;
+    outline-offset: 0px;
+}
+
+.button-add{
+    background-color: rgb(89, 190, 248);
+    color: white;
+    transition: all .2s;
+    box-sizing: border-box;
+    /*flex-box*/
+    align-self: flex-end;
+}
+
+.button-add:hover{
+    background-color: rgb(13, 115, 163);
+    transform: scale(1.025);
+    cursor: pointer;
+}
+
+table{
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.button-apagar{ 
+    /* position: absolute; 
+    right: 0;
+    bottom: 0;
+    */
+    transition: all .2s;   
+}
+
+.button-apagar:hover{
+    background-color: rgb(212, 212, 212);
+    transform: scale(1.025);
+    cursor: pointer;
+}
+
+.btnApagaLinha{
+    font-weight: none;
+    font-size: 14px;
+    margin-left: 10%;
+    width: 80%;   
+    padding: .2em 3em;
+}
+
+.btnApagaLinha:hover{
+    background-color: rgb(212, 212, 212);
+    transform: scale(1.025);
+    cursor: pointer;
+}
+
+#myBtn {
+    font-weight: none;
+    font-size: 14px;
+    margin-left: 10%;
+    width: 80%;   
+    padding: .2em 3em;
+}
+
+#myBtn:hover {
+    background-color: rgb(212, 212, 212);
+    transform: scale(1.025);
+    cursor: pointer;
+}
+
+.trow-head th{
+    font-size: 1.2em;
+    color: rgba(0, 0, 0, 0.623);
+    background-color: rgb(146, 143, 143);
+    border: 3px solid rgb(26, 76, 105);
+    padding: 1em 5em;
+}
+
+#table-body tr td {
+    background: rgb(199, 199, 199);
+    font-size: 1em;
+    color: rgba(0, 0, 0, 0.712);
+    letter-spacing: 1px;
+    border: 3px solid rgb(26, 76, 105);
+    padding: 0.35em 0.50em;
+}
+
+#totalizador{
+    /* position: absolute; 
+    bottom: 0;
+    */
+    display: inline-block;
+    
+    font-size: 1.15em;
+    text-transform: uppercase;
+
+}
+
+#div-botaoEtotalizador{
+    
+} 
+
+#totalizador {
+  
+}
+
+#div__botoes {
+    float: right;
+}
+
+
+
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    
+  }
+  
+  
+  /* Modal Content/Box */
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 2px solid rgb(42, 42, 42);
+    width: 80%; /* Could be more or less, depending on screen size */
+    border-radius: 15px;
+  }
+
+  .modal-header {
+      margin-bottom: 4em;
+      text-align: center;
+  }
+
+  .modal-body {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 4em;
+  }
+
+  .modal-body input {
+    margin-left: .8em;
+    padding: .3em 2em .3em 0;
+  }
+
+
+  #modal-footer__btn {
+      padding: 0.3em 2.9em;
+      float: right;
+  }
+
+  #modal-footer__btn:hover {
+    background-color: rgb(212, 212, 212);
+    transform: scale(1.025);
+    cursor: pointer;
+}
+
+#input_cod_age { 
+    padding: 0.3em 0.2em 0.3em 0.3em;
+    
+}
+  
+  /* The Close Button */
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }

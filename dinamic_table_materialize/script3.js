@@ -118,6 +118,7 @@ function limpaConteudoInputs() {
  
 
 /*  BOTÃO EDITAR  */ 
+var elems = document.querySelectorAll('.modal');
 var $btn_edit_content;
 var $tds_body = document.getElementsByClassName('td_body');
 var $btn_edit_ok = document.getElementById('modal-footer__btn');
@@ -129,7 +130,6 @@ var array_tds;
 
 // When the user clicks on the button, open the modal
 function openModal(event) {
-    var elems = document.querySelectorAll('.modal');
     var instances = M.Modal.init(elems);
     $input_modal[1].focus();
     $btn_edit_content = parseInt(event.target.getAttribute("codigoID"));
@@ -181,6 +181,4 @@ function colocaNovosvalores() {
 function onSubmit(event) {
     event.preventDefault();
 } 
-
-
 

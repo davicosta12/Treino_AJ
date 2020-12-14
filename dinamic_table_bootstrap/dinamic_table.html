@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <title>pagina de exemplo formulario basico</title>
+        <meta charset="UTF-8">
+        <meta name="author" content="Davi">
+        <meta name="description" content="Formulário Teste">
+        <meta name="keywords" content="html5, tecnologia, estruturar, melhorar">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    </head>
+    <body>
+        <div class="container">   
+            <form action="#" method="#" class="formulario" onsubmit="onSubmit(event)">
+                <label class="label-age">Código<input type="number" min="0" name="codigo" id="input_age" class="label-input label-input-age form-control" placeholder="Código"></label>
+                <label class="label-name">Nome<input type="text" name="nome" id="input_name" class="label-input form-control" placeholder="Digite seu nome" autofocus></label>
+                <label>Email<input type="email" name="email" id="input_email" class="label-input form-control" placeholder="Digite seu e-mail"></label>
+                <button type="button" id="btn_add" class="btn btn-secondary">Adicionar</button>
+            </form>
+    
+            <div>    
+                <table style="margin-top: 1.8em;" class="table table-dark table-hover">
+                    <thead class="table-head">
+                        <tr class="trow-head">
+                            <th>Código</th>
+                            <th>Nome</th>
+                            <th>Email</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+    
+                    </tbody>
+                </table>     
+            </div>
+
+            <div id="div-botaoEtotalizador" class="clearfix">
+                <div id="totalizador">Total: <span id="span">0</span></div>
+                <div id="div__botoes">
+                    <button type="button" id="btn_limpa" class="btn btn-primary" onsubmit="onSubmit(event)">Apagar tabela</button> 
+                </div>
+            </div>   
+        </div>
+
+        <!-- Modal content -->
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Editar Formulário</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label class="label-cod-modal">Código<input type="number" disabled min="0" name="codigo-modal" id="input_cod_age" class="label-input-modal label-input-cod-modal form-control" placeholder="Novo código"></label>
+                    <label class="label-name-modal">Nome<input type="text" name="nome-modal" id="input_name_modal" class="label-input-modal form-control" placeholder="Digite outro nome" autofocus></label>
+                    <label>Email<input type="email" name="email-modal" id="input_email_modal" class="label-input-modal form-control" placeholder="Digite um e-mail diferente"></label>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Sair</button>
+                    <button type="button" id="modal-footer__btn" class="btn btn-primary">Confirmar</button>
+                </div>
+            </div>
+            </div>
+        </div>
+   
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+        <script src="script2.js"></script>   
+    </body>       
+</html>
+

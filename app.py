@@ -26,8 +26,10 @@ def update_delete_user(id=None):
     body = request.form.to_dict(flat=False)
     for user in users:
       if (user['id'] == int(id)):
-        user['name'] = body['name'][0],
-        user['email'] = body['email'][0],
+        user.update({
+          'name': body['name'][0],
+          'email': body['email'][0]
+        })
         return jsonify({ "message": "Alterado com sucesso" }), 201
     return jsonify({ "message": "ID não localizado" }), 404
 

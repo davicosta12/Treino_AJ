@@ -1,5 +1,8 @@
 from flask import Flask, jsonify, request, Response
+from flask_cors import CORS
+
 app = Flask(__name__)
+CORS(app)
 
 users = [
   { 'id': 1, 'name': 'David Carvalho', 'email': 'david.carvalho@ajdesenvolvimento.com.br' },
@@ -11,11 +14,11 @@ def get_insert_users():
     return jsonify(users)
 
   if request.method == 'POST':
-    body = request.form.to_dict(flat=False)
+    body = request.get_json()
     users.append({
-      'id': int(body['id'][0]),
-      'name': body['name'][0],
-      'email': body['email'][0],
+      'id': int(body.get('id')),
+      'name': body.get('name'),
+      'email': body.get('email'),
     })
     return jsonify({ "message": "Incluído com sucesso" }), 201
 
@@ -23,12 +26,12 @@ def get_insert_users():
 @app.route('/users/<id>', methods=['PUT', 'DELETE'])
 def update_delete_user(id=None):
   if request.method == 'PUT':
-    body = request.form.to_dict(flat=False)
+    body = request.get_json()
     for user in users:
       if (user['id'] == int(id)):
         user.update({
-          'name': body['name'][0],
-          'email': body['email'][0]
+          'name': body.get('name'),
+          'email': body.get('email')
         })
         return jsonify({ "message": "Alterado com sucesso" }), 201
     return jsonify({ "message": "ID não localizado" }), 404

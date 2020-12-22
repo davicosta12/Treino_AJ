@@ -15,12 +15,19 @@ def get_insert_users():
 
   if request.method == 'POST':
     body = request.get_json()
-    users.append({
+
+    for user in users:
+      if (user['id'] == int(body.get('id'))):
+        return jsonify({ "message": "Código já existente" }), 400
+
+    obj = {
       'id': int(body.get('id')),
       'name': body.get('name'),
       'email': body.get('email'),
-    })
-    return jsonify({ "message": "Incluído com sucesso" }), 201
+    }
+
+    users.append(obj)
+    return jsonify(obj), 201
 
 
 @app.route('/users/<id>', methods=['PUT', 'DELETE'])

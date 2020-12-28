@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <title>pagina de exemplo formulario basico</title>
+        <meta charset="UTF-8">
+        <meta name="author" content="Davi">
+        <meta name="description" content="Formulário Teste">
+        <meta name="keywords" content="html5, tecnologia, estruturar, melhorar">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    </head>
+    <body>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>  
+        <script type="text/javascript">
+            document.addEventListener("DOMContentLoaded", function(event) {
+                // - Code to execute when all DOM content is loaded. 
+                // - including fonts, images, etc.
+                iniciaComOsDados();
+            });
+          </script>
+          
+        <div class="container">   
+            <form action="#" method="#" class="formulario" onsubmit="onSubmit(event)">
+                <label class="label-age">Código<input type="text" name="codigo" id="input_age" class="label-input label-input-age form-control" placeholder="Código"></label>
+                <label class="label-name">Nome<input type="text" name="nome" id="input_name" class="label-input form-control" placeholder="Digite seu nome" autofocus></label>
+                <label>Email<input type="email" name="email" id="input_email" class="label-input form-control" placeholder="Digite seu e-mail"></label>
+                <button type="button" id="btn_add" class="btn btn-secondary">Adicionar</button>
+            </form>
+
+            <div>  
+                <div style="margin-top: 30px;" id="linear_barrer2" class="no-js">
+                    <div class="indeterminate"></div>
+                </div>  
+                <table style="margin-top: 1.8em;" class="table table-dark table-hover">
+                    <thead class="table-head">
+                        <tr class="trow-head">
+                            <th>Código</th>
+                            <th>Nome</th>
+                            <th>Email</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+    
+                    </tbody>
+                </table>     
+            </div>
+
+            <div id="totalizador">Total: <span id="span">0</span></div>
+
+        <!-- Modal Structure -->
+        <div id="modal1" class="modal">
+            <div class="modal-content">
+            <h4>Editar Formulário</h4>
+                <div id="linear_barrer" class="no-js">
+                    <div class="indeterminate"></div>
+                </div>
+                <label class="label-cod-modal">Código<input type="text" disabled  name="codigo-modal" id="input_cod_age" class="label-input-modal label-input-cod-modal form-control" placeholder="Novo código"></label>
+                <label class="label-name-modal">Nome<input type="text" name="nome-modal" id="input_name_modal" class="label-input-modal form-control" placeholder="Digite outro nome" autofocus></label>
+                <label>Email<input type="email" name="email-modal" id="input_email_modal" class="label-input-modal form-control" placeholder="Digite um e-mail diferente"></label>
+                <label for="textarea1">Textarea</label>
+                <textarea id="textarea1" class="materialize-textarea" placeholder="Observações" maxlength="80"></textarea>
+            </div>
+            <div class="modal-footer">
+            <a href="#!" id="modal-footer__btn_close" class="modal-close waves-effect waves-green btn-flat">Fechar</a>
+            <a href="#!" id="modal-footer__btn" class="waves-effect waves-green btn-flat">OK</a>
+            </div>
+        </div>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var Modalelem = document.querySelector('.modal');
+                var instance = M.Modal.init(Modalelem);
+            });
+        </script>
+        <script src="script.js"></script> 
+    </body>       
+</html>
+

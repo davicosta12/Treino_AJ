@@ -43,9 +43,7 @@ const validaNome = (listaDeCaracteres) => {
   for(caractere of listaDeCaracteres) if( !isNaN(caractere) && caractere !== " " ) return true;
 }
 
-$btn_add.addEventListener('click', () => {
-  enviaDado();
-});
+$btn_add.addEventListener('click', () => enviaDado())
 
 const enviaDado = () => {
   if(diversasValidacoes($value_inputs)) return;
@@ -59,23 +57,33 @@ const enviaDado = () => {
     'obs': $textarea.value
   }
 
-  createUser(payload)
-  .then((data) => {
-      iniciaComOsDados()
-      .then( () => M.toast({html: "Usuário inserido com sucesso!", classes: 'rounded'} ));
-    
-    })
-  .catch((error) => {
-    $linear_barrer2.classList.remove('progress');    
-    $btn_add.classList.remove('disabled');
+  const toastObj = { 
+    html: '', 
+    classes: 'rounded',
+  };
 
-    if(error.status === 404) M.toast({html: 'Código não localizado!', classes: 'rounded'});
-    else if(error.response && error.response.data && error.response.data.message) M.toast({html: error.response.data.message, classes: 'rounded'});
-    else M.toast({html: 'Ocorreu um erro ao processar as informações', classes: 'rounded'});
+  createUser(payload)
+    .then(data =>
+      iniciaComOsDados().then( () => 
+        Object.assign(toastObj, { html: 'Usuário inserido com sucesso!' })
+      )
+    )
+    .catch((error) => {
+      $linear_barrer2.classList.remove('progress');    
+      $btn_add.classList.remove('disabled');
+
+      if(error.status === 404)
+        Object.assign(toastObj, { html: 'Código não localizado' })
+      
+      else if (error.response && error.response.data && error.response.data.message)
+        Object.assign(toastObj, { html: error.response.data.message })
+      
+      else
+        Object.assign(toastObj, { html: 'Ocorreu um erro ao processar as informações' })
     })
-  .then((message) => {
-    // always executed 
-  });
+    .finally(message =>
+      M.toast(toastObj)
+    );
 }
 
 const iniciaComOsDados = () => {
@@ -99,16 +107,17 @@ const iniciaComOsDados = () => {
                                       codigoID="${item.id}" nome="${item.name}" email="${item.email}">Editar</button> 
                                     </td>`;                                                      
       }
+      resolve();
     }
     catch(error) {
       // handle error
       M.toast({html: 'Ocorreu um erro ao processar as informações', classes: 'rounded'});
+      reject(error);
     } 
     finally {
       // always executed
       apagaInputs($value_inputs);
       removeBarrerAndBtnAdd();
-      resolve();
     }
   })
 }
@@ -158,19 +167,20 @@ const atualizaDado = () => {
 
     updateUser($btn_ID, payload)
     .then((data) => {
-      iniciaComOsDados()
-      .then(() => M.toast({html: data.message, classes: 'rounded'} ));
-      
+      iniciaComOsDados().then(() => 
+        M.toast({html: data.message, classes: 'rounded'} )
+      );
+      resolve();
     })
-    .catch((error) => { 
+    .catch(error => { 
       $linear_barrer.classList.remove('progress');
       if(error.status === 404) M.toast({html: 'Código não localizado!', classes: 'rounded'});
-      else M.toast({html: 'Ocorreu um erro ao processar as informações', classes: 'rounded'}); 
+      else M.toast({html: 'Ocorreu um erro ao processar as informações', classes: 'rounded'});
+      reject(error);
     })
-    .then(() => {
+    .finally(() => {
       // always executed 
       $linear_barrer2.classList.remove('progress');
-      resolve();
     });
   })
 }
@@ -194,9 +204,6 @@ const deletaDado = async (event) => {
 
     if(error.status === 404) M.toast({html: 'Código não localizado!', classes: 'rounded'});
     else M.toast({html: 'Ocorreu um erro ao processar as informações', classes: 'rounded'}); 
-  })
-  .then(() =>{
-
   })
 }
 

@@ -1,0 +1,17 @@
+.clearfix:after {
+    content: ' ';
+    display: block;
+    clear: both;
+}
+
+.container {
+    margin-top: 15px;
+}
+
+#btn_add {
+    float: right;
+}
+
+#totalizador {
+    margin-top: 35px;
+}

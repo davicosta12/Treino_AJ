@@ -3,24 +3,24 @@ const diversasValidacoes = ($value_inputs, $textarea = '') => {
     const listaDeCaracteresEmail = $value_inputs[2].value.split('');
   
     for(elem of $value_inputs) if( elem.value === "" ) {
-      alert("Existe(m) campo(s) vazio(s)");
+      M.toast({html: "Existe(m) campo(s) vazio(s)", classes: 'rounded'});
       return true;
     }
   
     if( isNaN($value_inputs[0].value )) {
-      alert("Escreva somente números no campo código!");
+      M.toast({html: "Escreva somente números no campo código!", classes: 'rounded'});
       return true;
     } 
       
     if(validaNome(listaDeCaracteresNome)) {
-      alert("O campo nome aceita somente valores do tipo texto!");
+      M.toast({html: "O campo nome aceita somente valores do tipo texto!", classes: 'rounded'});
       return true;
     }
   
     if(validaEmail(listaDeCaracteresEmail)) return true;
   
     if($textarea) if( $textarea.value === "" ) {
-      alert("Existe(m) campo(s) vazio(s)");
+      M.toast({html: "Existe(m) campo(s) vazio(s)", classes: 'rounded'});
       return true;
     }
   }
@@ -29,7 +29,7 @@ const validaEmail = (listaDeCaracteresEmail) => {
     for( caractere of listaDeCaracteresEmail) {
         if(caractere === "@") return false; 
     }
-    alert("O email necessita do caractere '@'!");
+    M.toast({html: "O email necessita do caractere '@'!", classes: 'rounded'});
     return true;
 }
 

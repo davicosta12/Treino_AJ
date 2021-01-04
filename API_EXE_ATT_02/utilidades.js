@@ -42,3 +42,8 @@ const contaNumerolinhas = userlist => {
     arrayElements.push($textarea);
     return arrayElements;
   }
+
+  const insereToast = (string) => {
+    Object.assign(toastObj, { html: `${string}`, classes: 'rounded' }) 
+    M.toast(toastObj);
+  }

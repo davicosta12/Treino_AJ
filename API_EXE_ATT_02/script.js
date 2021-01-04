@@ -1,6 +1,6 @@
 $btn_add.addEventListener('click', () => enviaDado())
 const enviaDado = () => {
-  if(diversasValidacoes($value_inputs)) return;
+  if(isValid($value_inputs)) return;
   $linear_barrer2.classList.add('progress');
   $btn_add.classList.add('disabled');
 
@@ -14,7 +14,7 @@ const enviaDado = () => {
   createUser(payload)
     .then(() =>
       iniciaComOsDados().then( () => 
-        Object.assign(toastObj, { html: 'Usuário inserido com sucesso!' })
+      insereToast('Usuário inserido com sucesso!')
       )
     )
     .catch((error) => {
@@ -22,17 +22,12 @@ const enviaDado = () => {
       $btn_add.classList.remove('disabled');
 
       if(error.status === 404)
-        Object.assign(toastObj, { html: 'Código não localizado' })
-      
+        insereToast('Código não localizado') 
       else if (error.response && error.response.data && error.response.data.message)
-        Object.assign(toastObj, { html: error.response.data.message })
-      
+        insereToast(error.response.data.message) 
       else
-        Object.assign(toastObj, { html: 'Ocorreu um erro ao processar as informações' })
+        insereToast('Ocorreu um erro ao processar as informações')
     })
-    .finally(message =>
-      M.toast(toastObj)
-    );
 }
 
 const iniciaComOsDados = () => {
@@ -60,7 +55,7 @@ const iniciaComOsDados = () => {
     }
     catch(error) {
       // handle error
-      M.toast({html: 'Ocorreu um erro ao processar as informações', classes: 'rounded'});
+      insereToast('Ocorreu um erro ao processar as informações') 
       reject(error);
     } 
     finally {
@@ -89,8 +84,8 @@ const get_edita = async ($ElementosUsuario) => {
   }
   catch {
     // handle error
-    M.toast({html: 'Ocorreu um erro ao processar as informações', classes: 'rounded'});
-
+    insereToast('Ocorreu um erro ao processar as informações');
+   
   }
   finally {
     // always executed
@@ -111,7 +106,7 @@ const atualizaDado = () => {
     updateUser($btn_ID, payload)
     .then((data) => {
       iniciaComOsDados().then(() => 
-        M.toast({html: data.message, classes: 'rounded'} )
+        insereToast(data.message)
       );
       resolve();
     })
@@ -137,7 +132,7 @@ const deletaDado = async (event) => {
   deleteUser($btn_content_ID)
   .then((message) => {
     iniciaComOsDados()
-    .then(() => M.toast({html: message, classes: 'rounded'} ));
+    .then(() => insereToast(message))
 
   })
   .catch((error) => {

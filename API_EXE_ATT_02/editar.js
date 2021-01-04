@@ -17,7 +17,7 @@ $btn_edit_ok.addEventListener('click', () => {
   const listDados = [$btn_ID, $name, $email];
   for(let i = 0; i < listDados.length; i++) listDados[i] = $input_modal[i];
   
-  if(diversasValidacoes($input_modal, $textarea)) return;
+  if(isValid($input_modal, $textarea)) return;
   $btn_edit_ok.classList.add('disabled');
   setAttributeDisabled($input_modal, $textarea);
   atualizaDado()

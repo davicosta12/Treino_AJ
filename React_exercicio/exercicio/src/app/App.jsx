@@ -2,10 +2,11 @@ import './App.css';
 import React from 'react';
 import axios from "axios"
 
+
 import Form from '../components/form/Form'
 import Table from '../components/table/Table'
 
-
+const API_URL = 'http://127.0.0.1:5000';
 
 const App = () => {
 

@@ -1,0 +1,10 @@
+.Form {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.Form button {
+    align-self: center;  
+}
+

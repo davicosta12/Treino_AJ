@@ -14,35 +14,36 @@
         <div class="container">   
             <form action="#" method="#" class="formulario clearfix" onsubmit="onSubmit(event)">
                 <div class="row">
-                    <div class="col s12 m4 l2"><label class="label-age">Código<input type="text" name="codigo" id="input_age" class="label-input label-input-age " placeholder="Código"></label></div>
-                    <div class="col s12 m4 l5"><label class="label-name">Nome<input type="text" name="nome" id="input_name" class="label-input " placeholder="Digite seu nome" autofocus></label></div>
-                    <div class="col s12 m4 l5"><label>Email<input type="email" name="email" id="input_email" class="label-input" placeholder="Digite seu e-mail"></label></div>
+                    <div class="col s12 m4 l2"><label class="label-age">Código<input type="text" name="codigo" id="input_age" class="label-input label-input-age " placeholder="Código" autofocus /></label></div>
+                    <div class="col s12 m4 l5"><label class="label-name">Nome<input type="text" name="nome" id="input_name" class="label-input " placeholder="Digite seu nome" /></label></div>
+                    <div class="col s12 m4 l5"><label>Email<input type="email" name="email" id="input_email" class="label-input" placeholder="Digite seu e-mail"></label /></div>
                 </div>
                 <button type="button" id="btn_add" class="btn btn-secondary">Adicionar</button>
             </form>
 
-            <div>  
-                <div style="margin-top: 30px;" id="linear_barrer2" class="no-js">
-                    <div class="indeterminate"></div>
-                </div>  
-                <table style="margin-top: 1.8em;" class="table table-dark table-hover responsive-table">
-                    <thead class="table-head">
-                        <tr class="trow-head">
-                            <th>Código</th>
-                            <th>Nome</th>
-                            <th>Email</th>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody id="table-body">
-    
-                    </tbody>
-                </table>     
-            </div>
+        
 
+            <div style="margin-top: 30px;" id="linear_barrer2" class="no-js">
+                <div class="indeterminate"></div>
+            </div> 
+
+            <table style="margin-top: 1.8em;" class="table table-dark table-hover responsive-table">
+                <thead class="table-head">
+                    <tr class="trow-head">
+                        <th>Código</th>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+
+                </tbody>
+            </table>
             <div id="totalizador">Total: <span id="span">0</span></div>
-
+        </div>     
+            
         <!-- Modal Structure -->
         <div id="modal1" class="modal">
             <div class="modal-content">

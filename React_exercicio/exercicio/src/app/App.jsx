@@ -22,8 +22,8 @@ class App extends Component {
     this.setState({ formData: { ...this.state.formData, [data.name]: data.value }})
   } 
 
-  searchUser(id, name, value) {
-    this.setState({user: {id, name, value}})
+  searchUser(id, name, email) {
+    this.setState({ user: {id, name, email }})
 
   }
 
@@ -129,9 +129,20 @@ class App extends Component {
   render() {
     return (
       <div className="DataTable">
-        <Form onChangeData={this.hadleFormData.bind(this)} onEnviarDados={this.enviaDado}></Form>
-        <Table dados={this.state.users} ondeletaDado={this.deletaDado} onsearchUser={this.searchUser.bind(this)} ongetUser={this.get_User} onEditClick={this.handleEditClick.bind(this)}></Table>
-        {this.state.openModal && <Editar usuario={this.state.user} onAtualizaDado={this.atualizaDado}></Editar>}
+        <Form
+          onChangeData={this.hadleFormData.bind(this)}
+          onEnviarDados={this.enviaDado}
+        />
+        <Table
+          dados={this.state.users}
+          ondeletaDado={this.deletaDado}
+          onsearchUser={this.searchUser.bind(this)}
+          ongetUser={this.get_User}
+        />
+        <Editar
+          usuario={this.state.user}
+          onAtualizaDado={this.atualizaDado}
+        />
       </div>
     )
   }

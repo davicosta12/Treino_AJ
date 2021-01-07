@@ -1,23 +1,51 @@
 import './Form.css';
-import React from 'react';
+import React, { useState } from 'react';
 
 const Form = props => {
-    return (
-        <div className="Form">
-            <form>
-                <div className="row">
-                    <div  className="col s12 m4 l2 "><label>Código<input type="text" name="codigo" id="input_age" placeholder="Código" autoFocus /></label></div>
-                    <div className="col s12 m4 l5 "><label>Nome<input type="text" name="nome" id="input_name" placeholder="Digite seu nome" /></label></div>
-                    <div className="col s12 m4 l5"><label>Email<input type="email" name="email" id="input_email" placeholder="Digite seu e-mail" /></label></div>
-                </div>
-            </form>
-            <button 
-                type="button" 
-                id="btn_add"
-                className="btn btn-secondary">
-            Adicionar</button>
+  return (
+    <div className="Form">
+      <form>
+        <div className="row">
+          <div className="col s12 m4 l2 ">
+            <label>Código
+              <input
+                onChange={ev => handleChange(ev, props)}
+                type="text"
+                name="codigo"
+                placeholder="Código"
+                autoFocus />
+            </label>
+          </div>
+          <div className="col s12 m4 l5 ">
+            <label>Nome
+              <input
+                onChange={ev => handleChange(ev, props)}
+                type="text"
+                name="nome"
+                placeholder="Digite seu nome" />
+            </label>
+          </div>
+          <div className="col s12 m4 l5">
+            <label>Email
+              <input
+                onChange={ev => handleChange(ev, props)}
+                type="email"
+                name="email"
+                placeholder="Digite seu e-mail" />
+            </label>
+          </div>
         </div>
-    )
+      </form>
+      <button
+        onClick={() => {
+          props.onEnviarDados()
+        }}
+        type="button"
+        className="btn btn-secondary">
+        Adicionar</button>
+    </div>
+  )
 }
-    
+const handleChange = ({ target: { name, value }}, props) => props.onChangeData({ name, value });
+
 export default Form

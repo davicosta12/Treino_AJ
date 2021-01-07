@@ -1,10 +1,14 @@
 import './totalizador.css';
 import React from 'react';
 
-const Totalizador = () => {
+const Totalizador = props => {
+    const dados = props.dados;
+    let soma = 0;
+    for( let i=0; i<dados.length; i++ ) soma++;
+
     return (
-        <div className="Totalizador" id="Totalizador">
-            <span id="span">0</span>
+        <div className="Totalizador">
+            <p>Total: <span>{soma}</span></p>
         </div>       
     )
 }

@@ -18,7 +18,14 @@
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        var Modalelem = document.querySelector('.modal');
+        window.instance = M.Modal.init(Modalelem);
+      });
+    </script>
     <div id="root"></div>
   </body>
 </html>

@@ -1,22 +1,28 @@
-import './Editar.css';
 import React, { Component } from 'react';
+import {getAllUsers, createUser, getUser, updateUser, deleteUser } from '../../API/http'
 
 class Editar extends Component {
-
-  constructor(props) {
-    super(props)
-    this.state = {
-      id: '',
-      name: '',
-      email: '',
+    constructor(props) {
+        super(props)
+        this.state = {
+        id: '',
+        name: '',
+        email: '',
+        obs: '',
+        }
     }
-  }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.usuario?.id !== this.props.usuario.id) {
-      this.setState(this.props.usuario)
-    }
-  }
+    componentDidUpdate(prevProps) {
+        if (prevProps.usuario?.id !== this.props.usuario.id) {
+          getUser(this.props.usuario.id)
+          .then(user => this.setState({
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            obs: user.obs
+          }))
+         }
+      }
 
   render() {
     return (
@@ -75,6 +81,7 @@ class Editar extends Component {
       </div>
     )
   }
+
 }
 
 export default Editar;

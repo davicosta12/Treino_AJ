@@ -34,7 +34,6 @@ const Table = props => {
                 <td>
                   <button
                     onClick={() => {
-                      props.onsearchUser(user.id, user.name, user.email)
                       props.ongetUser(user.id)
                     }}
                     data-target="modal1"

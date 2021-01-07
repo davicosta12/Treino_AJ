@@ -22,11 +22,6 @@ class App extends Component {
     this.setState({ formData: { ...this.state.formData, [data.name]: data.value }})
   } 
 
-  searchUser(id, name, email) {
-    this.setState({ user: {id, name, email }})
-
-  }
-
   handleEditClick() {
     this.setState({ openModal: true })
   }
@@ -51,13 +46,11 @@ class App extends Component {
     
     try {
     // handle success
-      const id = user_id
-      console.log(id)
-      const data = await getUser(id);
+      const codigo = user_id
+      const data = await getUser(codigo);
       const userlist = data
-      const obs = userlist.obs
-      for(let user of this.state.users) if(user.id === id) user['obs'] = obs;
-       
+      const {id, name, email, obs} = userlist
+      this.setState({user:{id, name, email,obs}}) 
     }
     catch {
       // handle error
@@ -136,7 +129,6 @@ class App extends Component {
         <Table
           dados={this.state.users}
           ondeletaDado={this.deletaDado}
-          onsearchUser={this.searchUser.bind(this)}
           ongetUser={this.get_User}
         />
         <Editar

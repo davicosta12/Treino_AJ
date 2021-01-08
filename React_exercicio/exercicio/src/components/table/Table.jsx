@@ -2,10 +2,11 @@ import './Table.css';
 import React from 'react';
 
 import Totalizador from '../totalizador/totalizador'
+import Editar from '../editar/Editar'
 
 const Table = props => {
   const dados = props.dados;
-
+  
   return (
     <div className="Tabela">
       <table className="table table-dark table-hover">
@@ -27,14 +28,18 @@ const Table = props => {
                 <td> {user.email} </td>
                 <td>
                   <button
-                    onClick={_ => props.ondeletaDado(user.id)}
+                    onClick={_ => { 
+                        props.activeLoading()
+                        props.ondeletaDado(user.id, props)
+                    }}
                     className="btn btn-secondary">Excluir
                   </button>
                 </td>
                 <td>
                   <button
-                    onClick={() => {
-                      props.ongetUser(user.id)
+                    onClick={ _ => {     
+                        props.activeLoadingModal()
+                        props.ongetUser(user.id, props)     
                     }}
                     data-target="modal1"
                     className="btn modal-trigger">Editar
@@ -46,7 +51,15 @@ const Table = props => {
         </tbody>
       </table>
       <Totalizador dados={dados} />
+      <Editar
+        usuario={props.usuario}
+        onAtualizaDado={props.onAtualizaDado}
+        isActive={props.isActive}
+        activeLoadingModal={props.activeLoadingModal}
+        desactiveLoadingModal={props.desactiveLoadingModal}
+      />
     </div>
+    
   )
 }
 

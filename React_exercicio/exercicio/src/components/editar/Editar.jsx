@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {getAllUsers, createUser, getUser, updateUser, deleteUser } from '../../API/http'
+import Loading from '../loadingBarrer/Loading'
 
 class Editar extends Component {
     constructor(props) {
@@ -12,6 +13,19 @@ class Editar extends Component {
         }
     }
 
+    setStateDefault() {
+      this.setState({
+        id: '',
+        name: '',
+        email: '',
+        obs: '',
+      })
+    }
+
+    activeLoadingModal() {
+      this.props.activeLoadingModal()
+    }
+
     componentDidUpdate(prevProps) {
         if (prevProps.usuario?.id !== this.props.usuario.id) {
           getUser(this.props.usuario.id)
@@ -19,8 +33,14 @@ class Editar extends Component {
             id: user.id,
             name: user.name,
             email: user.email,
-            obs: user.obs
+            obs: user.obs,
           }))
+          .catch(() => {
+            this.props.desactiveLoadingModal()
+          })
+          .finally(()=> {
+              this.props.desactiveLoadingModal()
+          })   
          }
       }
 
@@ -28,6 +48,7 @@ class Editar extends Component {
     return (
       <div id="modal1" className="modal">
         <div className="modal-content">
+          <Loading isActive={this.props.isActive} />
           <h4>Editar Formulário</h4>
           <label>Código
             <input
@@ -65,14 +86,23 @@ class Editar extends Component {
               placeholder="Digite um e-mail diferente" />
           </label>
           <label htmlFor="textarea1">Textarea</label>
-          <textarea className="materialize-textarea" placeholder="Observações" maxLength="80"></textarea>
+            <textarea 
+            onChange={(event) => {
+                let obs = event.target.value;
+                this.setState({ obs });
+              }}
+            value={this.state.obs}
+            className="materialize-textarea" 
+            placeholder="Observações" 
+            maxLength="80">
+            </textarea>
         </div>
 
         <div className="modal-footer">
           <a href="#!" className="modal-close waves-effect waves-green btn-flat">Cancelar</a>
           <a
             onClick={() => {
-              this.props.onAtualizaDado(this.name, this.email)
+              this.props.onAtualizaDado(this.state, this.setStateDefault)
             }}
             href="#!"
             className="waves-effect waves-green btn-flat">OK

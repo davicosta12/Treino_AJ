@@ -38,7 +38,8 @@ const Form = props => {
       </form>
       <button
         onClick={() => {
-          props.onEnviarDados()
+          props.activeLoading()
+          props.onEnviarDados(props)
         }}
         type="button"
         className="btn btn-secondary">

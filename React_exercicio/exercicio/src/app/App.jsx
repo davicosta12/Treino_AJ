@@ -5,13 +5,15 @@ import {getAllUsers, createUser, getUser, updateUser, deleteUser } from '../API/
 import Form from '../components/form/Form'
 import Table from '../components/table/Table'
 import Editar from '../components/editar/Editar'
+import Loading from '../components/loadingBarrer/Loading'
 
 class App extends Component {
   state = {
     users: [],
     formData: {},
     user: {},
-    openModal: false,
+    activeLoagind: false,
+    activeLoadingModal: false,
   }
 
   componentDidMount() {
@@ -22,48 +24,66 @@ class App extends Component {
     this.setState({ formData: { ...this.state.formData, [data.name]: data.value }})
   } 
 
-  handleEditClick() {
-    this.setState({ openModal: true })
+  handleActiveLoading() {
+    this.setState({ activeLoagind: true })
   }
 
-  async iniciaComOsDados() {
-    try {
-      const users = await getAllUsers();
-      this.setState({ users });
-    }
+  handleDesactiveLoading() {
+    this.setState({ activeLoagind: false })
+  }
 
-    catch (error) {
-      // handle error
-      console.log('Ocorreu um erro ao processar as informações');
-    }
+  handleActiveLoadingModal() {
+    this.setState({ activeLoadingModal: true })
+  }
 
-    finally {
-      // always executed
-    }
+  handleDesactiveLoadingModal() {
+    this.setState({ activeLoadingModal: false })
+  }
+
+ iniciaComOsDados = () => {
+    return new Promise( async (resolve, reject) => {
+      try {
+        const users = await getAllUsers();
+        this.setState({ users });
+        resolve();
+      }
+
+      catch (error) {
+        // handle error
+        console.log('Ocorreu um erro ao processar as informações');
+        reject(error)
+      }
+
+      finally {
+        // always executed    
+      }
+    })
   }
 
   get_User = async (user_id) => {
-    
-    try {
-    // handle success
-      const codigo = user_id
-      const data = await getUser(codigo);
-      const userlist = data
-      const {id, name, email, obs} = userlist
-      this.setState({user:{id, name, email,obs}}) 
-    }
-    catch {
-      // handle error
-      console.log('Ocorreu um erro ao processar as informações');
-     
-    }
-    finally {
-      // always executed
-    
-    }
+    return new Promise( async (resolve, reject) => {
+      try {
+      // handle success
+        const codigo = user_id
+        const data = await getUser(codigo);
+        const userlist = data
+        const {id, name, email, obs} = userlist
+        this.setState({user:{id, name, email,obs}})
+        resolve()
+      }
+      catch {
+        // handle error
+        reject()
+        console.log('Ocorreu um erro ao processar as informações');
+      }
+      finally {
+        // always executed 
+
+      }
+    })
   }
 
-  enviaDado = () => { 
+  enviaDado = (props) => { 
     const payload = {
       'id': this.state.formData.codigo, 
       'name': this.state.formData.nome, 
@@ -72,9 +92,15 @@ class App extends Component {
     }
     createUser(payload)
       .then(() =>
-        this.iniciaComOsDados()
-        )  
+        this.iniciaComOsDados().then(() => {
+          console.log("Usuário inserido com sucesso!")
+        })
+        .finally(() => {
+          props.desactiveLoading()
+        })
+      )  
       .catch((error) => {
+        props.desactiveLoading()
         if(error.status === 404)
           console.log('Código não localizado') 
         else if (error.response && error.response.data && error.response.data.message)
@@ -82,13 +108,16 @@ class App extends Component {
         else
           console.log('Ocorreu um erro ao processar as informações')
       })
+      .finally(() => {
+        
+      })
   }
 
-  atualizaDado = (name, email) => {
+  atualizaDado = (state, setState) => {
     const payload = {
-      'name': name, 
-      'email': email,
-      'obs': ''
+      'name': state.name, 
+      'email': state.email,
+      'obs': state.obs,
     }
 
     const id = this.state.user.id 
@@ -96,25 +125,32 @@ class App extends Component {
     updateUser(id, payload)
     .then((data) => {
       this.iniciaComOsDados()
-        console.log(data.message) 
+      .then(() => console.log(data.message))
     })
+
     .catch(error => { 
       console.log(error)
     })
     .finally(() => {
       // always executed 
-      
+      setState()
     });
     
   }
 
-  deletaDado = (id) => {
+  deletaDado = (id, props) => {
     deleteUser(id)
-    .then((message) => {
-      this.iniciaComOsDados()
+    .then(() => {
+      this.iniciaComOsDados().then(_ =>  console.log("Usuário deletado com sucesso"))
+    .finally(() => {
+      props.desactiveLoading()
+    })
       
     })
     .catch((error) => {
+      props.desactiveLoading()
+    }) 
+    .finally(() => {
       
     })
   }
@@ -125,16 +161,25 @@ class App extends Component {
         <Form
           onChangeData={this.hadleFormData.bind(this)}
           onEnviarDados={this.enviaDado}
+          activeLoading={this.handleActiveLoading.bind(this)}
+          desactiveLoading={this.handleDesactiveLoading.bind(this)}
         />
+        <Loading
+          isActive={this.state.activeLoagind}
+         />
         <Table
           dados={this.state.users}
           ondeletaDado={this.deletaDado}
           ongetUser={this.get_User}
-        />
-        <Editar
+          activeLoading={this.handleActiveLoading.bind(this)}
+          desactiveLoading={this.handleDesactiveLoading.bind(this)}
+          activeLoadingModal={this.handleActiveLoadingModal.bind(this)}
+          desactiveLoadingModal={this.handleDesactiveLoadingModal.bind(this)}
           usuario={this.state.user}
           onAtualizaDado={this.atualizaDado}
+          isActive={this.state.activeLoadingModal}
         />
+
       </div>
     )
   }

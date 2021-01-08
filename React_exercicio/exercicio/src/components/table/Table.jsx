@@ -37,9 +37,9 @@ const Table = props => {
                 </td>
                 <td>
                   <button
-                    onClick={ _ => {     
-                        props.activeLoadingModal()
-                        props.ongetUser(user.id, props)     
+                    onClick={ () => {     
+                        props.activeLoadingModal();
+                        props.onGetUser(user.id);
                     }}
                     data-target="modal1"
                     className="btn modal-trigger">Editar
@@ -57,6 +57,7 @@ const Table = props => {
         isActive={props.isActive}
         activeLoadingModal={props.activeLoadingModal}
         desactiveLoadingModal={props.desactiveLoadingModal}
+        onGetUser={props.onGetUser}
       />
     </div>
     

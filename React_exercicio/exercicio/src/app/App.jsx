@@ -8,10 +8,10 @@ import Editar from '../components/editar/Editar'
 import Loading from '../components/loadingBarrer/Loading'
 
 class App extends Component {
+
   state = {
     users: [],
     formData: {},
-    user: {},
     activeLoagind: false,
     activeLoadingModal: false,
   }
@@ -60,28 +60,33 @@ class App extends Component {
     })
   }
 
-  get_User = async (user_id) => {
-    return new Promise( async (resolve, reject) => {
-      try {
-      // handle success
-        const codigo = user_id
-        const data = await getUser(codigo);
-        const userlist = data
-        const {id, name, email, obs} = userlist
-        this.setState({user:{id, name, email,obs}})
-        resolve()
-      }
-      catch {
-        // handle error
-        reject()
-        console.log('Ocorreu um erro ao processar as informações');
-      }
-      finally {
-        // always executed 
-
-      }
+  handleGetUser = async userId => {
+    return new Promise( (resolve, reject) => {
+      this.setState({ 
+        user: { },
+        activeLoadingModal: true,
+      }, async () => {
+        try {
+          // handle success
+          const data = await getUser(userId);
+          const { id, name, email, obs } = data;
+          this.setState({ user: { id, name, email, obs } });
+          resolve();
+        }
+        catch(err) {
+          // handle error
+          reject(err);
+          console.log('Ocorreu um erro ao processar as informações');
+        }
+        finally {
+          this.setState({ activeLoadingModal: false })
+        }
+      })
     })
   }
+
+  handleEditUser = data =>
+    this.setState({ user: { ...this.state.user, ...data } });
 
   enviaDado = (props) => { 
     const payload = {
@@ -113,12 +118,8 @@ class App extends Component {
       })
   }
 
-  atualizaDado = (state, setState) => {
-    const payload = {
-      'name': state.name, 
-      'email': state.email,
-      'obs': state.obs,
-    }
+  atualizaDado = () => {
+    const payload = { ...this.state.user }
 
     const id = this.state.user.id 
 
@@ -133,7 +134,6 @@ class App extends Component {
     })
     .finally(() => {
       // always executed 
-      setState()
     });
     
   }
@@ -151,7 +151,6 @@ class App extends Component {
       props.desactiveLoading()
     }) 
     .finally(() => {
-      
     })
   }
 
@@ -170,7 +169,7 @@ class App extends Component {
         <Table
           dados={this.state.users}
           ondeletaDado={this.deletaDado}
-          ongetUser={this.get_User}
+          onGetUser={this.handleGetUser}
           activeLoading={this.handleActiveLoading.bind(this)}
           desactiveLoading={this.handleDesactiveLoading.bind(this)}
           activeLoadingModal={this.handleActiveLoadingModal.bind(this)}

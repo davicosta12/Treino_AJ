@@ -1,50 +1,42 @@
 import React, { Component } from 'react';
-import {getAllUsers, createUser, getUser, updateUser, deleteUser } from '../../API/http'
+import { getAllUsers, createUser, getUser, updateUser, deleteUser } from '../../API/http'
 import Loading from '../loadingBarrer/Loading'
 
+const INITIAL_STATE = {
+  id: '',
+  name: '',
+  email: '',
+  obs: '',
+}
+
 class Editar extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-        id: '',
-        name: '',
-        email: '',
-        obs: '',
-        }
+
+  constructor(props) {
+    super(props);
+    this.state = INITIAL_STATE;
+  }
+
+  componentDidUpdate() {
+    if (!this.props.usuario?.id && this.state.id) {
+      this.setState(INITIAL_STATE);
     }
 
-    setStateDefault() {
-      this.setState({
-        id: '',
-        name: '',
-        email: '',
-        obs: '',
-      })
+    if (this.props.usuario?.id && 
+      this.props.usuario.id !== this.state.id
+    ) {
+        this.setState({ ...this.props.usuario });
     }
+  }
 
-    activeLoadingModal() {
-      this.props.activeLoadingModal()
-    }
+  handleChange = ev =>
+    this.setState({ [ev.target.name]: ev.target.value });
 
-    componentDidUpdate(prevProps) {
-        if (prevProps.usuario?.id !== this.props.usuario.id) {
-          getUser(this.props.usuario.id)
-          .then(user => this.setState({
-            id: user.id,
-            name: user.name,
-            email: user.email,
-            obs: user.obs,
-          }))
-          .catch(() => {
-            this.props.desactiveLoadingModal()
-          })
-          .finally(()=> {
-              this.props.desactiveLoadingModal()
-          })   
-         }
-      }
+  activeLoadingModal() {
+    this.props.activeLoadingModal()
+  }
 
   render() {
+    const { id, name, email, obs } = this.state;
     return (
       <div id="modal1" className="modal">
         <div className="modal-content">
@@ -54,58 +46,59 @@ class Editar extends Component {
             <input
               readOnly
               type="text"
-              name="codigo-modal"
+              name="id"
               className="label-input-modal label-input-cod-modal form-control"
               placeholder="Novo código"
-              value={this.state.id}
+              value={id}
             />
           </label>
           <label>Nome
             <input
-              onChange={(event) => {
-                let name = event.target.value;
-                this.setState({ name });
-              }}
-              value={this.state.name}
+              onChange={this.handleChange}
+              value={name}
+              name="name"
               type="text"
-              name="nome-modal"
               className="form-control"
               placeholder="Digite outro nome"
               autoFocus />
           </label>
           <label>Email
             <input
-              onChange={(event) => {
-                let email = event.target.value;
-                this.setState({ email });
-              }}
-              value={this.state.email}
+              onChange={this.handleChange}
+              value={email}
               type="email"
-              name="email-modal"
+              name="email"
               className="label-input-modal form-control"
               placeholder="Digite um e-mail diferente" />
           </label>
           <label htmlFor="textarea1">Textarea</label>
-            <textarea 
-            onChange={(event) => {
-                let obs = event.target.value;
-                this.setState({ obs });
-              }}
-            value={this.state.obs}
-            className="materialize-textarea" 
-            placeholder="Observações" 
+          <textarea
+            onChange={this.handleChange}
+            name="obs"
+            value={obs}
+            className="materialize-textarea"
+            placeholder="Observações"
             maxLength="80">
-            </textarea>
+          </textarea>
         </div>
 
         <div className="modal-footer">
-          <a href="#!" className="modal-close waves-effect waves-green btn-flat">Cancelar</a>
           <a
-            onClick={() => {
-              this.props.onAtualizaDado(this.state, this.setStateDefault)
+            href="#!"
+            onClick={ev => ev.preventDefault()}
+            className="modal-close waves-effect waves-green btn-flat"
+          >
+            Cancelar
+          </a>
+          <a
+            onClick={ev => {
+              ev.preventDefault();
+              this.props.onAtualizaDado(this.state)
             }}
             href="#!"
-            className="waves-effect waves-green btn-flat">OK
+            className="waves-effect waves-green btn-flat"
+          >
+            OK
           </a>
         </div>
       </div>

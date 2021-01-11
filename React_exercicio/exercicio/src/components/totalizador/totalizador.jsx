@@ -11,6 +11,7 @@ const Totalizador = props => {
             <p>Total: <span>{soma}</span></p>
         </div>       
     )
+    
 }
 
 export default Totalizador

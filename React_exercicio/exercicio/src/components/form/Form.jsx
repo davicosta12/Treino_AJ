@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import Validacoes from '../../validacoes'
 
 const Form = props => {
-  const [buttonAttribute, setAttribute] = useState(false);
+  const [enabled, setEnabled] = useState(false);
   const $value_inputs = document.getElementsByClassName('input');
 
   return (
@@ -44,12 +44,8 @@ const Form = props => {
         </div>
       </form>
       <button
-        onClick={() => {  
-        if(Validacoes($value_inputs)) return;
-        setAttribute(true);
-        props.onEnviarDados(setAttribute, $value_inputs)    
-        }}
-        disabled={buttonAttribute ? true : false}
+        onClick={() => {handleCreateUser($value_inputs, setEnabled, props)}}
+        disabled={enabled ? true : false}
         type="button"
         className="btn btn-secondary">
         Adicionar</button>
@@ -57,5 +53,11 @@ const Form = props => {
   )
 }
 const handleChange = ({ target: { name, value }}, props) => props.onChangeData({ name, value });
+
+const handleCreateUser = ($value_inputs, setEnabled, props) => {
+  if(Validacoes($value_inputs)) return;
+  setEnabled(true);
+  props.onEnviarDados(setEnabled, $value_inputs) 
+}
 
 export default Form

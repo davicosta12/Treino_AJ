@@ -35,8 +35,10 @@ class Editar extends Component {
   handleChange = ev =>
     this.setState({ [ev.target.name]: ev.target.value });
 
-  activeLoadingModal() {
-    this.props.activeLoadingModal()
+  handleUpdate = (ev) => {
+    ev.preventDefault();
+    if(Validacoes(values_modalForm, textAreaValue)) return;
+    this.props.onUpdate(this.state)
   }
 
   render() {
@@ -44,7 +46,7 @@ class Editar extends Component {
     return (
       <div id="modal1" className="modal">
         <div className="modal-content">
-          <Loading isActive={this.props.isActive} />
+          <Loading isActiveLoading={this.props.isActiveLoading} />
           <h4>Editar Formulário</h4>
           <label>Código
             <input
@@ -95,11 +97,7 @@ class Editar extends Component {
             Cancelar
           </a>
           <a
-            onClick={ev => {
-              ev.preventDefault();
-              if(Validacoes(values_modalForm, textAreaValue)) return;
-              this.props.onAtualizaDado(this.state)
-            }}
+            onClick={ev => {this.handleUpdate(ev)}}
             href="#!"
             className="waves-effect waves-green btn-flat"
           >

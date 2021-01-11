@@ -1,10 +1,11 @@
 import './Table.css';
-import React from 'react';
+import React, {useState} from 'react';
 
 import Totalizador from '../totalizador/totalizador'
 import Editar from '../editar/Editar'
 
 const Table = props => {
+  const [buttonAttribute, setAttribute] = useState(false);
   const dados = props.dados;
   
   return (
@@ -29,19 +30,21 @@ const Table = props => {
                 <td>
                   <button
                     onClick={_ => { 
-                        props.activeLoading()
-                        props.ondeletaDado(user.id, props)
+                        setAttribute(true)
+                        props.ondeletaDado(user.id, setAttribute)
                     }}
+                    disabled={buttonAttribute ? true : false}
                     className="btn btn-secondary">Excluir
                   </button>
                 </td>
                 <td>
                   <button
-                    onClick={ () => {     
-                        props.activeLoadingModal();
-                        props.onGetUser(user.id);
+                    onClick={ () => {  
+                        setAttribute(true)   
+                        props.onGetUser(user.id, setAttribute);
                     }}
                     data-target="modal1"
+                    disabled={buttonAttribute ? true : false}
                     className="btn modal-trigger">Editar
                   </button>
                 </td>
@@ -55,8 +58,6 @@ const Table = props => {
         usuario={props.usuario}
         onAtualizaDado={props.onAtualizaDado}
         isActive={props.isActive}
-        activeLoadingModal={props.activeLoadingModal}
-        desactiveLoadingModal={props.desactiveLoadingModal}
         onGetUser={props.onGetUser}
       />
     </div>

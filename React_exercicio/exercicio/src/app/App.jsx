@@ -11,8 +11,9 @@ class App extends Component {
 
   state = {
     users: [],
+    user: {},
     formData: {},
-    activeLoagind: false,
+    activeLoading: false,
     activeLoadingModal: false,
   }
 
@@ -24,22 +25,6 @@ class App extends Component {
     this.setState({ formData: { ...this.state.formData, [data.name]: data.value }})
   } 
 
-  handleActiveLoading() {
-    this.setState({ activeLoagind: true })
-  }
-
-  handleDesactiveLoading() {
-    this.setState({ activeLoagind: false })
-  }
-
-  handleActiveLoadingModal() {
-    this.setState({ activeLoadingModal: true })
-  }
-
-  handleDesactiveLoadingModal() {
-    this.setState({ activeLoadingModal: false })
-  }
-
  iniciaComOsDados = () => {
     return new Promise( async (resolve, reject) => {
       try {
@@ -50,7 +35,7 @@ class App extends Component {
 
       catch (error) {
         // handle error
-        console.log('Ocorreu um erro ao processar as informações');
+        alert('Ocorreu um erro ao processar as informações');
         reject(error)
       }
 
@@ -60,7 +45,7 @@ class App extends Component {
     })
   }
 
-  handleGetUser = async userId => {
+  handleGetUser = async (userId, setAttribute) => {
     return new Promise( (resolve, reject) => {
       this.setState({ 
         user: { },
@@ -76,10 +61,11 @@ class App extends Component {
         catch(err) {
           // handle error
           reject(err);
-          console.log('Ocorreu um erro ao processar as informações');
+          alert('Ocorreu um erro ao processar as informações');
         }
         finally {
           this.setState({ activeLoadingModal: false })
+          setAttribute(false)
         }
       })
     })
@@ -88,69 +74,88 @@ class App extends Component {
   handleEditUser = data =>
     this.setState({ user: { ...this.state.user, ...data } });
 
-  enviaDado = (props) => { 
-    const payload = {
-      'id': this.state.formData.codigo, 
-      'name': this.state.formData.nome, 
-      'email': this.state.formData.email,
-      'obs': ''
-    }
-    createUser(payload)
+  enviaDado = (setAttribute, $value_inputs) => {
+    return new Promise( async (resolve, reject) => { 
+      this.setState({ activeLoading: true })
+      const payload = {...this.state.formData}
+      createUser(payload)
       .then(() =>
-        this.iniciaComOsDados().then(() => {
-          console.log("Usuário inserido com sucesso!")
+        this.iniciaComOsDados()
+        .then(() => {
+          alert("Usuário inserido com sucesso!")
         })
         .finally(() => {
-          props.desactiveLoading()
+          this.setState({ activeLoading: false })
+          
         })
       )  
       .catch((error) => {
-        props.desactiveLoading()
         if(error.status === 404)
-          console.log('Código não localizado') 
+          alert('Código não localizado') 
         else if (error.response && error.response.data && error.response.data.message)
-          console.log(error.response.data.message) 
+          alert(error.response.data.message) 
         else
-          console.log('Ocorreu um erro ao processar as informações')
+          alert('Ocorreu um erro ao processar as informações')
       })
       .finally(() => {
-        
+        this.setState({ activeLoading: false })
+        setAttribute(false)
+        for( let elem of $value_inputs) elem.value = '';
       })
+    })
   }
 
-  atualizaDado = () => {
-    const payload = { ...this.state.user }
+  atualizaDado = (state) => {
+    return new Promise( async (resolve, reject) => {
+      this.setState({ activeLoadingModal: true })
+      const payload = { ...state }
 
-    const id = this.state.user.id 
+      const id = this.state.user.id 
 
-    updateUser(id, payload)
-    .then((data) => {
-      this.iniciaComOsDados()
-      .then(() => console.log(data.message))
-    })
-
-    .catch(error => { 
-      console.log(error)
-    })
-    .finally(() => {
-      // always executed 
-    });
-    
-  }
-
-  deletaDado = (id, props) => {
-    deleteUser(id)
-    .then(() => {
-      this.iniciaComOsDados().then(_ =>  console.log("Usuário deletado com sucesso"))
-    .finally(() => {
-      props.desactiveLoading()
-    })
+      updateUser(id, payload)
+      .then((data) => {
+        this.iniciaComOsDados()
+        .then(() => alert(data.message))
+        .finally(() => {
+          this.setState({ activeLoadingModal: false })
+          window.instance.close()
+        })
       
+      })
+
+      .catch(error => { 
+        this.setState({ activeLoadingModal: false })
+        alert(error)
+      })
+      .finally(() => {
+        // always executed 
+
+      });
     })
-    .catch((error) => {
-      props.desactiveLoading()
-    }) 
-    .finally(() => {
+    }
+
+  deletaDado = (id, setAttribute) => {
+    return new Promise( async (resolve, reject) => {
+      this.setState({ activeLoading: true })
+      deleteUser(id)
+      .then(() => {
+        this.iniciaComOsDados()
+        .then(() =>  alert("Usuário deletado com sucesso"))
+        .finally(() => {
+          this.setState({ activeLoading: false })
+          setAttribute(false)
+      })    
+
+      })
+      .catch((error) => {
+        setAttribute(false)
+        this.setState({ activeLoadingModal: false })
+        alert(error)
+      
+      }) 
+      .finally(() => {
+    
+      })
     })
   }
 
@@ -160,20 +165,14 @@ class App extends Component {
         <Form
           onChangeData={this.hadleFormData.bind(this)}
           onEnviarDados={this.enviaDado}
-          activeLoading={this.handleActiveLoading.bind(this)}
-          desactiveLoading={this.handleDesactiveLoading.bind(this)}
         />
         <Loading
-          isActive={this.state.activeLoagind}
+          isActive={this.state.activeLoading}
          />
         <Table
           dados={this.state.users}
           ondeletaDado={this.deletaDado}
           onGetUser={this.handleGetUser}
-          activeLoading={this.handleActiveLoading.bind(this)}
-          desactiveLoading={this.handleDesactiveLoading.bind(this)}
-          activeLoadingModal={this.handleActiveLoadingModal.bind(this)}
-          desactiveLoadingModal={this.handleDesactiveLoadingModal.bind(this)}
           usuario={this.state.user}
           onAtualizaDado={this.atualizaDado}
           isActive={this.state.activeLoadingModal}

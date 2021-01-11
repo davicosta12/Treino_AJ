@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import { getAllUsers, createUser, getUser, updateUser, deleteUser } from '../../API/http'
 import Loading from '../loadingBarrer/Loading'
+import Validacoes from '../../validacoes'
+
+const values_modalForm = document.getElementsByClassName('input_modal');
+const textAreaValue = document.getElementsByTagName('textarea');
 
 const INITIAL_STATE = {
   id: '',
@@ -47,7 +51,7 @@ class Editar extends Component {
               readOnly
               type="text"
               name="id"
-              className="label-input-modal label-input-cod-modal form-control"
+              className="label-input-modal label-input-cod-modal form-control input_modal"
               placeholder="Novo código"
               value={id}
             />
@@ -58,7 +62,7 @@ class Editar extends Component {
               value={name}
               name="name"
               type="text"
-              className="form-control"
+              className="form-control input_modal"
               placeholder="Digite outro nome"
               autoFocus />
           </label>
@@ -68,7 +72,7 @@ class Editar extends Component {
               value={email}
               type="email"
               name="email"
-              className="label-input-modal form-control"
+              className="label-input-modal form-control input_modal"
               placeholder="Digite um e-mail diferente" />
           </label>
           <label htmlFor="textarea1">Textarea</label>
@@ -93,6 +97,7 @@ class Editar extends Component {
           <a
             onClick={ev => {
               ev.preventDefault();
+              if(Validacoes(values_modalForm, textAreaValue)) return;
               this.props.onAtualizaDado(this.state)
             }}
             href="#!"

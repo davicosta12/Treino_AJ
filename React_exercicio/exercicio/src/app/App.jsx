@@ -1,12 +1,18 @@
 import './App.css';
 import React, { Component } from 'react';
 import {getAllUsers, createUser, getUser, updateUser, deleteUser } from '../API/http'
+import insereToast from '../insereToast'
 
 import Form from '../components/form/Form'
 import Table from '../components/table/Table'
 import Editar from '../components/editar/Editar'
 import Loading from '../components/loadingBarrer/Loading'
 
+
+const toastObj = { 
+  html: '', 
+  classes: 'rounded',
+};
 
 class App extends Component {
   state = {
@@ -35,7 +41,7 @@ class App extends Component {
 
       catch (error) {
         // handle error
-        alert('Ocorreu um erro ao processar as informações');
+        insereToast('Ocorreu um erro ao processar as informações', toastObj);
         reject(error)
       }
 
@@ -62,7 +68,7 @@ class App extends Component {
         catch(err) {
           // handle error
           reject(err);
-          alert('Ocorreu um erro ao processar as informações');
+          insereToast('Ocorreu um erro ao processar as informações', toastObj);
         }
         finally {
           this.setState({ activeLoadingModal: false })
@@ -79,15 +85,15 @@ class App extends Component {
           const payload = {...this.state.formData}
           await createUser(payload)
           await this.getAllUsers()
-          alert("usuario inserido com sucesso!") 
+          insereToast("usuario inserido com sucesso!", toastObj) 
         }
         catch(error) {
           if(error.status === 404)
-            alert('Código não localizado') 
+            insereToast('Código não localizado', toastObj) 
           else if (error.response?.data?.message)
-            alert(error.response.data.message) 
+            insereToast(error.response.data.message, toastObj) 
           else
-            alert('Ocorreu um erro ao processar as informações')
+            insereToast('Ocorreu um erro ao processar as informações', toastObj)
         }
         finally {
           this.setState({ activeLoading: false })
@@ -107,10 +113,10 @@ class App extends Component {
             const id = this.state.user.id 
             const data = await updateUser(id, payload)
             await this.getAllUsers()
-            alert(data.message)
+            insereToast(data.message, toastObj)
           }
           catch(error) {
-            alert(error)
+            insereToast(error, toastObj)
           }
           finally {
             // always executed 
@@ -130,10 +136,10 @@ class App extends Component {
         try {
           await deleteUser(id)
           await this.getAllUsers()
-          alert("Usuário deletado com sucesso")
+          insereToast("Usuário deletado com sucesso", toastObj)
         }
         catch(error) {
-          alert(error)
+          insereToast(error, toastObj)
         }
         finally {
           this.setState({ activeLoading: false })

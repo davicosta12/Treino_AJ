@@ -5,13 +5,16 @@ import {getAllUsers, createUser, getUser, updateUser, deleteUser } from '../API/
 import Form from '../components/form/Form'
 import Table from '../components/table/Table'
 import Editar from '../components/editar/Editar'
+import Loading from '../components/loadingBarrer/Loading'
 
 class App extends Component {
+
   state = {
     users: [],
-    formData: {},
     user: {},
-    openModal: false,
+    formData: {},
+    activeLoading: false,
+    activeLoadingModal: false,
   }
 
   componentDidMount() {
@@ -22,116 +25,159 @@ class App extends Component {
     this.setState({ formData: { ...this.state.formData, [data.name]: data.value }})
   } 
 
-  searchUser(id, name, value) {
-    this.setState({user: {id, name, value}})
+ iniciaComOsDados = () => {
+    return new Promise( async (resolve, reject) => {
+      try {
+        const users = await getAllUsers();
+        this.setState({ users });
+        resolve();
+      }
 
+      catch (error) {
+        // handle error
+        alert('Ocorreu um erro ao processar as informações');
+        reject(error)
+      }
+
+      finally {
+        // always executed    
+      }
+    })
   }
 
-  handleEditClick() {
-    this.setState({ openModal: true })
+  handleGetUser = async (userId, setAttribute) => {
+    return new Promise( (resolve, reject) => {
+      this.setState({ 
+        user: { },
+        activeLoadingModal: true,
+      }, async () => {
+        try {
+          // handle success
+          const data = await getUser(userId);
+          const { id, name, email, obs } = data;
+          this.setState({ user: { id, name, email, obs } });
+          resolve();
+        }
+        catch(err) {
+          // handle error
+          reject(err);
+          alert('Ocorreu um erro ao processar as informações');
+        }
+        finally {
+          this.setState({ activeLoadingModal: false })
+          setAttribute(false)
+        }
+      })
+    })
   }
 
-  async iniciaComOsDados() {
-    try {
-      const users = await getAllUsers();
-      this.setState({ users });
-    }
+  handleEditUser = data =>
+    this.setState({ user: { ...this.state.user, ...data } });
 
-    catch (error) {
-      // handle error
-      console.log('Ocorreu um erro ao processar as informações');
-    }
-
-    finally {
-      // always executed
-    }
-  }
-
-  get_User = async (user_id) => {
-    
-    try {
-    // handle success
-      const id = user_id
-      console.log(id)
-      const data = await getUser(id);
-      const userlist = data
-      const obs = userlist.obs
-      for(let user of this.state.users) if(user.id === id) user['obs'] = obs;
-       
-    }
-    catch {
-      // handle error
-      console.log('Ocorreu um erro ao processar as informações');
-     
-    }
-    finally {
-      // always executed
-    
-    }
-  }
-
-  enviaDado = () => { 
-    const payload = {
-      'id': this.state.formData.codigo, 
-      'name': this.state.formData.nome, 
-      'email': this.state.formData.email,
-      'obs': ''
-    }
-    createUser(payload)
+  enviaDado = (setAttribute, $value_inputs) => {
+    return new Promise( async (resolve, reject) => { 
+      this.setState({ activeLoading: true })
+      const payload = {...this.state.formData}
+      createUser(payload)
       .then(() =>
         this.iniciaComOsDados()
-        )  
+        .then(() => {
+          alert("Usuário inserido com sucesso!")
+        })
+        .finally(() => {
+          this.setState({ activeLoading: false })
+          
+        })
+      )  
       .catch((error) => {
         if(error.status === 404)
-          console.log('Código não localizado') 
+          alert('Código não localizado') 
         else if (error.response && error.response.data && error.response.data.message)
-          console.log(error.response.data.message) 
+          alert(error.response.data.message) 
         else
-          console.log('Ocorreu um erro ao processar as informações')
+          alert('Ocorreu um erro ao processar as informações')
       })
+      .finally(() => {
+        this.setState({ activeLoading: false })
+        setAttribute(false)
+        for( let elem of $value_inputs) elem.value = '';
+      })
+    })
   }
 
-  atualizaDado = (name, email) => {
-    const payload = {
-      'name': name, 
-      'email': email,
-      'obs': ''
+  atualizaDado = (state) => {
+    return new Promise( async (resolve, reject) => {
+      this.setState({ activeLoadingModal: true })
+      const payload = { ...state }
+
+      const id = this.state.user.id 
+
+      updateUser(id, payload)
+      .then((data) => {
+        this.iniciaComOsDados()
+        .then(() => alert(data.message))
+        .finally(() => {
+          this.setState({ activeLoadingModal: false })
+          window.instance.close()
+        })
+      
+      })
+
+      .catch(error => { 
+        this.setState({ activeLoadingModal: false })
+        alert(error)
+      })
+      .finally(() => {
+        // always executed 
+
+      });
+    })
     }
 
-    const id = this.state.user.id 
+  deletaDado = (id, setAttribute) => {
+    return new Promise( async (resolve, reject) => {
+      this.setState({ activeLoading: true })
+      deleteUser(id)
+      .then(() => {
+        this.iniciaComOsDados()
+        .then(() =>  alert("Usuário deletado com sucesso"))
+        .finally(() => {
+          this.setState({ activeLoading: false })
+          setAttribute(false)
+      })    
 
-    updateUser(id, payload)
-    .then((data) => {
-      this.iniciaComOsDados()
-        console.log(data.message) 
-    })
-    .catch(error => { 
-      console.log(error)
-    })
-    .finally(() => {
-      // always executed 
+      })
+      .catch((error) => {
+        setAttribute(false)
+        this.setState({ activeLoadingModal: false })
+        alert(error)
       
-    });
+      }) 
+      .finally(() => {
     
-  }
-
-  deletaDado = (id) => {
-    deleteUser(id)
-    .then((message) => {
-      this.iniciaComOsDados()
-      
-    })
-    .catch((error) => {
-      
+      })
     })
   }
 
   render() {
     return (
       <div className="DataTable">
-        <Form onChangeData={this.hadleFormData.bind(this)} onEnviarDados={this.enviaDado}></Form>
-        <Table dados={this.state.users} ondeletaDado={this.deletaDado} onsearchUser={this.searchUser.bind(this)} ongetUser={this.get_User} onEditClick={this.handleEditClick.bind(this)}></Table>
-        {this.state.openModal && <Editar usuario={this.state.user} onAtualizaDado={this.atualizaDado}></Editar>}
+        <Form
+          onChangeData={this.hadleFormData.bind(this)}
+          onEnviarDados={this.enviaDado}
+        />
+        <Loading
+          isActive={this.state.activeLoading}
+         />
+        <Table
+          dados={this.state.users}
+          ondeletaDado={this.deletaDado}
+          onGetUser={this.handleGetUser}
+          usuario={this.state.user}
+          onAtualizaDado={this.atualizaDado}
+          isActive={this.state.activeLoadingModal}
+        />
+
       </div>
     )
   }

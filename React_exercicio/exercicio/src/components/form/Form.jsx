@@ -1,7 +1,11 @@
 import './Form.css';
-import React, { useState } from 'react';
+import React, {useState} from 'react';
+import Validacoes from '../../validacoes'
 
 const Form = props => {
+  const [buttonAttribute, setAttribute] = useState(false);
+  const $value_inputs = document.getElementsByClassName('input');
+
   return (
     <div className="Form">
       <form>
@@ -11,7 +15,8 @@ const Form = props => {
               <input
                 onChange={ev => handleChange(ev, props)}
                 type="text"
-                name="codigo"
+                name="id"
+                className="input"
                 placeholder="Código"
                 autoFocus />
             </label>
@@ -21,25 +26,30 @@ const Form = props => {
               <input
                 onChange={ev => handleChange(ev, props)}
                 type="text"
-                name="nome"
+                name="name"
+                className="input"
                 placeholder="Digite seu nome" />
             </label>
           </div>
-          <div className="col s12 m4 l5">
+          <div className="col s12 m4 l5 ">
             <label>Email
               <input
                 onChange={ev => handleChange(ev, props)}
                 type="email"
                 name="email"
-                placeholder="Digite seu e-mail" />
+                className="input"
+                placeholder="Digite seu e-mail " />
             </label>
           </div>
         </div>
       </form>
       <button
-        onClick={() => {
-          props.onEnviarDados()
+        onClick={() => {  
+        if(Validacoes($value_inputs)) return;
+        setAttribute(true);
+        props.onEnviarDados(setAttribute, $value_inputs)    
         }}
+        disabled={buttonAttribute ? true : false}
         type="button"
         className="btn btn-secondary">
         Adicionar</button>

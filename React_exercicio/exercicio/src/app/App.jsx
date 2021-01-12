@@ -131,12 +131,12 @@ class App extends Component {
   }
 
   render() {
-    const { user, users, activeLoadingModal, activeLoading, } = this.state
+    const { user, users, activeLoadingModal, activeLoading, enableAdicionar } = this.state
     return (
       <div className="DataTable">
         <Form
           onEnviarDados={this.createUser}
-          enableAdicionar={this.state.enableAdicionar}
+          enableAdicionar={enableAdicionar}
         />
         <Loading
           isActiveLoading={activeLoading}

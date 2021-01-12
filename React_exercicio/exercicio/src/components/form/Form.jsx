@@ -1,63 +1,85 @@
 import './Form.css';
-import React, {useState} from 'react';
-import Validacoes from '../../validacoes'
+import React, {Component, useEffect} from 'react';
+import {isValid, isValidTextArea} from '../../validacoes'
 
-const Form = props => {
-  const [enabled, setEnabled] = useState(false);
-  const $value_inputs = document.getElementsByClassName('input');
-
-  return (
-    <div className="Form">
-      <form>
-        <div className="row">
-          <div className="col s12 m4 l2 ">
-            <label>Código
-              <input
-                onChange={ev => handleChange(ev, props)}
-                type="text"
-                name="id"
-                className="input"
-                placeholder="Código"
-                autoFocus />
-            </label>
-          </div>
-          <div className="col s12 m4 l5 ">
-            <label>Nome
-              <input
-                onChange={ev => handleChange(ev, props)}
-                type="text"
-                name="name"
-                className="input"
-                placeholder="Digite seu nome" />
-            </label>
-          </div>
-          <div className="col s12 m4 l5 ">
-            <label>Email
-              <input
-                onChange={ev => handleChange(ev, props)}
-                type="email"
-                name="email"
-                className="input"
-                placeholder="Digite seu e-mail " />
-            </label>
-          </div>
-        </div>
-      </form>
-      <button
-        onClick={() => {handleCreateUser($value_inputs, setEnabled, props)}}
-        disabled={enabled ? true : false}
-        type="button"
-        className="btn btn-secondary">
-        Adicionar</button>
-    </div>
-  )
+const INITIAL_STATE = {
+  id: '',
+  name: '',
+  email: '',
 }
-const handleChange = ({ target: { name, value }}, props) => props.onChangeData({ name, value });
 
-const handleCreateUser = ($value_inputs, setEnabled, props) => {
-  if(Validacoes($value_inputs)) return;
-  setEnabled(true);
-  props.onEnviarDados(setEnabled, $value_inputs) 
+class Form extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = INITIAL_STATE;
+  }
+
+  componentDidUpdate(prevProps) {
+    if(prevProps.enableAdicionar !== this.props.enableAdicionar && !this.props.enableAdicionar) this.setState(INITIAL_STATE)
+  }
+
+  handleFormData = (data) => {
+    this.setState( { [data.name]: data.value } )
+  } 
+
+  handleChange = ({ target: { name, value }}) => {
+    this.handleFormData({ name, value })
+    this.setState({[name]: value})
+  }
+
+  handleCreateUser = () => {
+    if(isValid([this.state.id, this.state.name, this.state.email])) return;
+    this.props.onEnviarDados(this.state) 
+  }
+
+  render() {
+    return (
+      <div className="Form">
+        <form>
+          <div className="row">
+            <div className="col s12 m4 l2 ">
+              <label>Código
+                <input
+                  onChange={ev => this.handleChange(ev)}
+                  type="text"
+                  value={this.state.id}
+                  name="id"
+                  placeholder="Código"
+                  autoFocus />
+              </label>
+            </div>
+            <div className="col s12 m4 l5 ">
+              <label>Nome
+                <input
+                  onChange={ev => this.handleChange(ev)}
+                  type="text"
+                  value={this.state.name}
+                  name="name"
+                  placeholder="Digite seu nome" />
+              </label>
+            </div>
+            <div className="col s12 m4 l5 ">
+              <label>Email
+                <input
+                  onChange={ev => this.handleChange(ev)}
+                  type="email"
+                  value={this.state.email}
+                  name="email"
+                  placeholder="Digite seu e-mail " />
+              </label>
+            </div>
+          </div>
+        </form>
+        <button
+          onClick={() => {this.handleCreateUser()}}
+          disabled={this.props.enableAdicionar}
+          type="button"
+          className="btn btn-secondary">
+          Adicionar</button>
+      </div>
+    )
+  }
 }
 
 export default Form

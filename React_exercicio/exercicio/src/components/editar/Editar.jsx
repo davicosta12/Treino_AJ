@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
-import { getAllUsers, createUser, getUser, updateUser, deleteUser } from '../../API/http'
 import Loading from '../loadingBarrer/Loading'
-import Validacoes from '../../validacoes'
+import {isValid, isValidTextArea}from '../../validacoes'
 
-const values_modalForm = document.getElementsByClassName('input_modal');
-const textAreaValue = document.getElementsByTagName('textarea');
 
 const INITIAL_STATE = {
   id: '',
@@ -35,9 +32,10 @@ class Editar extends Component {
   handleChange = ev =>
     this.setState({ [ev.target.name]: ev.target.value });
 
-  handleUpdate = (ev) => {
+  handleUpdate = (ev, id, name, email, obs) => {
     ev.preventDefault();
-    if(Validacoes(values_modalForm, textAreaValue)) return;
+    if(isValid([id, name, email])) return;
+    if(isValidTextArea(obs)) return;
     this.props.onUpdate(this.state)
   }
 
@@ -53,7 +51,7 @@ class Editar extends Component {
               readOnly
               type="text"
               name="id"
-              className="label-input-modal label-input-cod-modal form-control input_modal"
+              className="label-input-modal label-input-cod-modal form-control"
               placeholder="Novo código"
               value={id}
             />
@@ -74,7 +72,7 @@ class Editar extends Component {
               value={email}
               type="email"
               name="email"
-              className="label-input-modal form-control input_modal"
+              className="label-input-modal form-control"
               placeholder="Digite um e-mail diferente" />
           </label>
           <label htmlFor="textarea1">Textarea</label>
@@ -97,7 +95,7 @@ class Editar extends Component {
             Cancelar
           </a>
           <a
-            onClick={ev => {this.handleUpdate(ev)}}
+            onClick={ev => {this.handleUpdate(ev, id, name, email, obs)}}
             href="#!"
             className="waves-effect waves-green btn-flat"
           >

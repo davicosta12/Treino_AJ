@@ -6,11 +6,12 @@ import Editar from '../editar/Editar'
 
 const Table = props => {
   const [ disableExcluir, setDisableExcluir ] = useState([]);
-  const { dados, usuario, onUpdate, isActiveLoading, onGetUser } = props;
+  const { dados, usuario, onUpdate, isActiveLoading, onGetUser, onDelet } = props;
 
   useEffect(() => {
-    setDisableExcluir(Array.from({ length: props.dados.length }, () => false))
-  }, [props.dados.length])
+    setDisableExcluir(Array(dados.length).fill(false))
+    
+  }, [dados.length])
 
   const handleDisableExcluir = (index, value) => {
     const _disableExcluir = [ ...disableExcluir ];
@@ -20,11 +21,11 @@ const Table = props => {
 
   const handleDelet = (id, index) => {
     setDisableExcluir(() => handleDisableExcluir(index, true));
-    props.onDelet(id)
+    onDelet(id)
   }
 
   const handleGetUser = (id) => {
-    props.onGetUser(id)
+    onGetUser(id)
   }
 
   return (

@@ -9,27 +9,18 @@ import Editar from '../components/editar/Editar'
 import Loading from '../components/loadingBarrer/Loading'
 
 
-const toastObj = { 
-  html: '', 
-  classes: 'rounded',
-};
-
 class App extends Component {
   state = {
     users: [],
     user: {},
-    formData: {},
     activeLoading: false,
     activeLoadingModal: false,
+    enableAdicionar: false,
   }
 
   componentDidMount() {
     this.getAllUsers();
   }
-
-  handleFormData = (data) => {
-    this.setState({ formData: { ...this.state.formData, [data.name]: data.value }})
-  } 
 
  getAllUsers = () => {
     return new Promise( async (resolve, reject) => {
@@ -38,13 +29,11 @@ class App extends Component {
         this.setState({ users });
         resolve();
       }
-
       catch (error) {
         // handle error
-        insereToast('Ocorreu um erro ao processar as informações', toastObj);
+        insereToast('Ocorreu um erro ao processar as informações');
         reject(error)
       }
-
       finally {
         // always executed    
       }
@@ -68,7 +57,7 @@ class App extends Component {
         catch(err) {
           // handle error
           reject(err);
-          insereToast('Ocorreu um erro ao processar as informações', toastObj);
+          insereToast('Ocorreu um erro ao processar as informações');
         }
         finally {
           this.setState({ activeLoadingModal: false })
@@ -77,35 +66,30 @@ class App extends Component {
     })
   }
 
-  createUser = (setEnabled, $value_inputs) => {
-    return new Promise( async (resolve, reject) => { 
-      this.setState({ activeLoading: true },
+  createUser = (state_do_form) => {
+      this.setState({ activeLoading: true, enableAdicionar: true },
       async () => {
         try {
-          const payload = {...this.state.formData}
+          const payload = {...state_do_form}
           await createUser(payload)
           await this.getAllUsers()
-          insereToast("usuario inserido com sucesso!", toastObj) 
+          insereToast("usuario inserido com sucesso!") 
         }
         catch(error) {
           if(error.status === 404)
-            insereToast('Código não localizado', toastObj) 
+            insereToast('Código não localizado') 
           else if (error.response?.data?.message)
-            insereToast(error.response.data.message, toastObj) 
+            insereToast(error.response.data.message) 
           else
-            insereToast('Ocorreu um erro ao processar as informações', toastObj)
+            insereToast('Ocorreu um erro ao processar as informações')
         }
         finally {
-          this.setState({ activeLoading: false })
-          setEnabled(false)
-          for( let elem of $value_inputs) elem.value = '';
+          this.setState({ activeLoading: false, enableAdicionar: false })
         }
       })     
-    })
   }
 
-  handleUpdate = (state, setEnabled) => {
-    return new Promise( async (resolve, reject) => {
+  handleUpdate = (state) => {
       this.setState({ activeLoadingModal: true }, 
         async () => {
           try {
@@ -113,10 +97,10 @@ class App extends Component {
             const id = this.state.user.id 
             const data = await updateUser(id, payload)
             await this.getAllUsers()
-            insereToast(data.message, toastObj)
+            insereToast(data.message)
           }
           catch(error) {
-            insereToast(error, toastObj)
+            insereToast(error)
           }
           finally {
             // always executed 
@@ -126,36 +110,33 @@ class App extends Component {
           }
       })
 
-    })
     }
 
   handleDelet = (id) => {
-    return new Promise( async (resolve, reject) => {
       this.setState({ activeLoading: true },  
       async () => {
         try {
           await deleteUser(id)
           await this.getAllUsers()
-          insereToast("Usuário deletado com sucesso", toastObj)
+          insereToast("Usuário deletado com sucesso")
         }
         catch(error) {
-          insereToast(error, toastObj)
+          insereToast(error)
         }
         finally {
           this.setState({ activeLoading: false })
         }
 
       })
-    })
   }
 
   render() {
-    const { user, users, activeLoadingModal, activeLoading } = this.state
+    const { user, users, activeLoadingModal, activeLoading, } = this.state
     return (
       <div className="DataTable">
         <Form
-          onChangeData={this.handleFormData}
           onEnviarDados={this.createUser}
+          enableAdicionar={this.state.enableAdicionar}
         />
         <Loading
           isActiveLoading={activeLoading}

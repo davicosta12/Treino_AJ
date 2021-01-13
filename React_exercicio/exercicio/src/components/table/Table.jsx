@@ -1,27 +1,26 @@
 import './Table.css';
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Totalizador from '../totalizador/totalizador'
 import Editar from '../editar/Editar'
 
 const Table = props => {
-  const [ disableExcluir, setDisableExcluir ] = useState([]);
-  const { dados, usuario, onUpdate, isActiveLoading, onGetUser, onDelet } = props;
+  const [disableExcluir, setDisableExcluir] = useState([]);
+  const { users, user, onUpdateUser, onGetUser, onDeleteUser, isActiveLoading } = props;
 
   useEffect(() => {
-    setDisableExcluir(Array(dados.length).fill(false))
-    
-  }, [dados.length])
+    setDisableExcluir(Array(users.length).fill(false))
+  }, [users.length])
 
   const handleDisableExcluir = (index, value) => {
-    const _disableExcluir = [ ...disableExcluir ];
+    const _disableExcluir = [...disableExcluir];
     _disableExcluir[index] = value;
     setDisableExcluir(_disableExcluir);
-  }  
+  }
 
-  const handleDelet = (id, index) => {
+  const handleDeleteUser = (id, index) => {
     setDisableExcluir(() => handleDisableExcluir(index, true));
-    onDelet(id)
+    onDeleteUser(id)
   }
 
   const handleGetUser = (id) => {
@@ -42,24 +41,28 @@ const Table = props => {
         </thead>
         <tbody>
           {
-            dados.map( (user, index) => (
+            users.map((user, index) => (
               <tr key={user.id}>
                 <td> {user.id} </td>
                 <td> {user.name} </td>
                 <td> {user.email} </td>
                 <td>
                   <button
-                    onClick={ () => {handleDelet(user.id, index)}}
+                    onClick={() => { handleDeleteUser(user.id, index) }}
                     disabled={disableExcluir && disableExcluir[index]}
-                    className="btn btn-secondary">Excluir
+                    className="btn btn-secondary"
+                  >
+                    Excluir
                   </button>
                 </td>
                 <td>
                   <button
-                    onClick={ () => {handleGetUser(user.id)}}
+                    onClick={() => { handleGetUser(user.id) }}
                     disabled={disableExcluir && disableExcluir[index]}
                     data-target="modal1"
-                    className="btn modal-trigger">Editar
+                    className="btn modal-trigger"
+                  >
+                    Editar
                   </button>
                 </td>
               </tr>
@@ -67,17 +70,17 @@ const Table = props => {
           }
         </tbody>
       </table>
-      <Totalizador dados={dados} />
+
+      <Totalizador users={users} />
+
       <Editar
-        usuario={usuario}
-        onUpdate={onUpdate}
-        isActiveLoading={isActiveLoading}
+        user={user}
         onGetUser={onGetUser}
+        onUpdateUser={onUpdateUser}
+        isActiveLoading={isActiveLoading}
       />
     </div>
-    
   )
-  
 
 }
 

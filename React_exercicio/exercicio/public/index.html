@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
@@ -24,10 +24,9 @@
       document.addEventListener('DOMContentLoaded', () => {
         var Modalelem = document.querySelector('.modal');
         window.instance = M.Modal.init(Modalelem);
-        window.M = M;
+        window.toast = M.toast;
       });
     </script>
-    <script src="validacoes.js"></script>
     <div id="root"></div>
   </body>
 </html>

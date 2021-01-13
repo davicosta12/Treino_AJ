@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Loading from '../loadingBarrer/Loading'
-import {isValid, isValidTextArea}from '../../validacoes'
-
+import { isNotValid, isNotValidTextArea } from '../../utils/validacoes'
 
 const INITIAL_STATE = {
   id: '',
@@ -18,33 +17,34 @@ class Editar extends Component {
   }
 
   componentDidUpdate() {
-    if (!this.props.usuario?.id && this.state.id) {
+    if (!this.props.user?.id && this.state.id) {
       this.setState(INITIAL_STATE);
     }
 
-    if (this.props.usuario?.id && 
-      this.props.usuario.id !== this.state.id
+    if (this.props.user?.id &&
+      this.props.user.id !== this.state.id
     ) {
-        this.setState({ ...this.props.usuario });
+      this.setState({ ...this.props.user });
     }
   }
 
-  handleChange = ev =>
-    this.setState({ [ev.target.name]: ev.target.value });
+  handleChange = ({target: { name, value }}) => this.setState({ [name]: value });
 
-  handleUpdate = (ev, id, name, email, obs) => {
+  handleUpdateUser = (ev, id, name, email, obs) => {
     ev.preventDefault();
-    if(isValid([id, name, email])) return;
-    if(isValidTextArea(obs)) return;
-    this.props.onUpdate(this.state)
+    if (isNotValid([id, name, email])) return;
+    if (isNotValidTextArea(obs)) return;
+    this.props.onUpdateUser(this.state);
   }
 
   render() {
     const { id, name, email, obs } = this.state;
+    const { isActiveLoading } = this.props;
+
     return (
       <div id="modal1" className="modal">
         <div className="modal-content">
-          <Loading isActiveLoading={this.props.isActiveLoading} />
+          <Loading isActiveLoading={isActiveLoading} />
           <h4>Editar Formulário</h4>
           <label>Código
             <input
@@ -95,7 +95,7 @@ class Editar extends Component {
             Cancelar
           </a>
           <a
-            onClick={ev => {this.handleUpdate(ev, id, name, email, obs)}}
+            onClick={ev => { this.handleUpdateUser(ev, id, name, email, obs) }}
             href="#!"
             className="waves-effect waves-green btn-flat"
           >

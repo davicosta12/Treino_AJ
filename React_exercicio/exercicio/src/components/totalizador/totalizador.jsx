@@ -2,9 +2,9 @@ import './totalizador.css';
 import React from 'react';
 
 const Totalizador = props => {
-    const dados = props.dados;
+    const { users } = props;
     let soma = 0;
-    for( let i=0; i<dados.length; i++ ) soma++;
+    for( let i=0; i<users.length; i++ ) soma++;
 
     return (
         <div className="Totalizador">

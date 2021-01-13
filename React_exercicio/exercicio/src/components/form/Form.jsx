@@ -1,6 +1,6 @@
 import './Form.css';
-import React, {Component, useEffect} from 'react';
-import {isValid, isValidTextArea} from '../../validacoes'
+import React, { Component } from 'react';
+import { isNotValid } from '../../utils/validacoes'
 
 const INITIAL_STATE = {
   id: '',
@@ -16,24 +16,24 @@ class Form extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if(prevProps.enableAdicionar !== this.props.enableAdicionar && !this.props.enableAdicionar) this.setState(INITIAL_STATE)
+    if (prevProps.disableAdicionar !== this.props.disableAdicionar && !this.props.disableAdicionar) {
+      this.setState(INITIAL_STATE)
+    }
   }
 
-  handleFormData = (data) => {
-    this.setState( { [data.name]: data.value } )
-  } 
-
-  handleChange = ({ target: { name, value }}) => {
-    this.handleFormData({ name, value })
-    this.setState({[name]: value})
-  }
+  handleChange = ({ target: { name, value } }) =>
+    this.setState({ [name]: value })
 
   handleCreateUser = () => {
-    if(isValid([this.state.id, this.state.name, this.state.email])) return;
-    this.props.onEnviarDados(this.state) 
+    const { id, name, email } = this.state;
+    if (isNotValid([ id, name, email ])) return;
+    this.props.onCreateUser(this.state);
   }
 
   render() {
+    const { id, name, email } = this.state;
+    const { disableAdicionar } = this.props;
+
     return (
       <div className="Form">
         <form>
@@ -41,9 +41,9 @@ class Form extends Component {
             <div className="col s12 m4 l2 ">
               <label>Código
                 <input
-                  onChange={ev => this.handleChange(ev)}
+                  onChange={this.handleChange}
                   type="text"
-                  value={this.state.id}
+                  value={id}
                   name="id"
                   placeholder="Código"
                   autoFocus />
@@ -52,9 +52,9 @@ class Form extends Component {
             <div className="col s12 m4 l5 ">
               <label>Nome
                 <input
-                  onChange={ev => this.handleChange(ev)}
+                  onChange={this.handleChange}
                   type="text"
-                  value={this.state.name}
+                  value={name}
                   name="name"
                   placeholder="Digite seu nome" />
               </label>
@@ -62,21 +62,24 @@ class Form extends Component {
             <div className="col s12 m4 l5 ">
               <label>Email
                 <input
-                  onChange={ev => this.handleChange(ev)}
+                  onChange={this.handleChange}
                   type="email"
-                  value={this.state.email}
+                  value={email}
                   name="email"
                   placeholder="Digite seu e-mail " />
               </label>
             </div>
           </div>
         </form>
+        
         <button
-          onClick={() => {this.handleCreateUser()}}
-          disabled={this.props.enableAdicionar}
+          onClick={() => this.handleCreateUser()}
+          disabled={disableAdicionar}
           type="button"
-          className="btn btn-secondary">
-          Adicionar</button>
+          className="btn btn-secondary"
+        >
+          Adicionar
+        </button>
       </div>
     )
   }

@@ -6,7 +6,7 @@ import Editar from '../editar/Editar'
 
 const Table = props => {
   const [disableExcluir, setDisableExcluir] = useState([]);
-  const { users, user, onUpdateUser, onGetUser, onDeleteUser, isActiveLoading } = props;
+  const { users, user, onUpdateUser, onGetUser, onDeleteUser, isActiveLoadingModal } = props;
 
   useEffect(() => {
     setDisableExcluir(Array(users.length).fill(false))
@@ -77,7 +77,7 @@ const Table = props => {
         user={user}
         onGetUser={onGetUser}
         onUpdateUser={onUpdateUser}
-        isActiveLoading={isActiveLoading}
+        isActiveLoadingModal={isActiveLoadingModal}
       />
     </div>
   )

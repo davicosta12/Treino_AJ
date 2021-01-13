@@ -11,7 +11,8 @@ class App extends Component {
   state = {
     users: [],
     user: {},
-    activeLoading: false,
+    activeLoadingExcluir: false,
+    activeLoadingAdicionar: false,
     activeLoadingModal: false,
     disableAdicionar: false,
   }
@@ -56,7 +57,7 @@ class App extends Component {
 
   handleCreateUser = user => {
     this.setState({
-      activeLoading: true,
+      activeLoadingAdicionar: true,
       disableAdicionar: true
     }, async () => {
       try {
@@ -74,7 +75,7 @@ class App extends Component {
           errorHandler(error)
       }
       finally {
-        this.setState({ activeLoading: false, disableAdicionar: false })
+        this.setState({ activeLoadingAdicionar: false, disableAdicionar: false })
       }
     })
   }
@@ -100,7 +101,7 @@ class App extends Component {
   }
 
   handleDeleteUser = (id) => {
-    this.setState({ activeLoading: true }, async () => {
+    this.setState({ activeLoadingExcluir: true }, async () => {
       try {
         await deleteUser(id)
         await this.getAllUsers()
@@ -110,7 +111,7 @@ class App extends Component {
         errorHandler(error)
       }
       finally {
-        this.setState({ activeLoading: false })
+        this.setState({ activeLoadingExcluir: false })
       }
     })
   }
@@ -120,7 +121,8 @@ class App extends Component {
       user,
       users,
       activeLoadingModal,
-      activeLoading,
+      activeLoadingAdicionar,
+      activeLoadingExcluir,
       disableAdicionar,
     } = this.state;
 
@@ -131,7 +133,8 @@ class App extends Component {
           disableAdicionar={disableAdicionar}
         />
         <Loading
-          isActiveLoading={activeLoading}
+          isActiveLoadingAdicionar={activeLoadingAdicionar}
+          isActiveLoadingExcluir={activeLoadingExcluir}
         />
         <Table
           users={users}
@@ -139,7 +142,7 @@ class App extends Component {
           onGetUser={this.handleGetUser}
           onDeleteUser={this.handleDeleteUser}
           onUpdateUser={this.handleUpdateUser}
-          isActiveLoading={activeLoadingModal}
+          isActiveLoadingModal={activeLoadingModal}
         />
       </div>
     )

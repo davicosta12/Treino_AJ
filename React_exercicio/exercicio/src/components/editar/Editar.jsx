@@ -39,12 +39,12 @@ class Editar extends Component {
 
   render() {
     const { id, name, email, obs } = this.state;
-    const { isActiveLoading } = this.props;
+    const { isActiveLoadingModal } = this.props;
 
     return (
       <div id="modal1" className="modal">
         <div className="modal-content">
-          <Loading isActiveLoading={isActiveLoading} />
+          <Loading isActiveLoadingModal={isActiveLoadingModal} />
           <h4>Editar Formulário</h4>
           <label>Código
             <input

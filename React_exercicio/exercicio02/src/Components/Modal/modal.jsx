@@ -24,39 +24,32 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const INITIAL_STATE = {
-    id: '',
-    name: '',
-    email: '',
-    obs: '',
-}
 
 const TransitionsModal = (props) => {
     const classes = useStyles();
     const { user, users, onGetUser, onDeleteUser, onUpdateUser, setShowBtn,
         activeLoadingModal, desactiveBtnUpdate, desactiveBtnCreate } = props;
     const [open, setOpen] = useState(false);
-    const [formData, setFormData] = useState(INITIAL_STATE);
 
-    useEffect(() => {
-        if (!user?.id && formData.id) {
-            setFormData(INITIAL_STATE)
-        }
-        if (user?.id && user.id !== formData.id) {
-            setFormData({ ...user })
-        }
+    // useEffect(() => {
+    //     if (!user?.id && formData.id) {
+    //         setFormData(INITIAL_STATE)
+    //     }
+    //     if (user?.id && user.id !== formData.id) {
+    //         setFormData({ ...user })
+    //     }
 
-    }, [user.id])
+    // }, [user.id])
 
     const clearFormData = () => {
-        setFormData(INITIAL_STATE)
+        props.onClearForm();
     }
 
-    const handleCreateUser = () => {
+    const handleCreateUser = formData => {
         props.onCreateUser(formData, handleClose)
     }
 
-    const handleEditUser = () => {
+    const handleEditUser = formData => {
         props.onUpdateUser(formData, handleClose)
     }
 
@@ -98,27 +91,13 @@ const TransitionsModal = (props) => {
                     <div className={classes.paper}>
                         <Form
                             user={user}
-                            formData={formData}
-                            setFormData={setFormData}
                             desactiveBtnUpdate={desactiveBtnUpdate}
+                            desactiveBtnCreate={desactiveBtnCreate}
+                            onClose={handleClose}
+                            onCreateUser={handleCreateUser}
+                            onEditUser={handleEditUser}
                         />
-                        <div className="btnsModal">
-                            <Button
-                                onClick={handleClose}
-                                color="secondary"
-                                variant="contained" >Close
-                            </Button>
-                            {desactiveBtnCreate && <Button
-                                onClick={handleCreateUser}
-                                color="secondary"
-                                variant="contained" >Create
-                            </Button>}
-                            {desactiveBtnUpdate && <Button
-                                onClick={handleEditUser}
-                                color="secondary"
-                                variant="contained" >Update
-                            </Button>}
-                        </div>
+
                     </div>
                 </Fade>
             </Modal>}
@@ -128,7 +107,7 @@ const TransitionsModal = (props) => {
                     setShowBtn('desactiveBtnUpdate', false)
                     setShowBtn('desactiveBtnCreate', true)
                     clearFormData()
-                    console.log(formData)
+                    // console.log(formData)
                     handleOpen()
                 }}
                 color="secondary"

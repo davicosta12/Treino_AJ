@@ -120,6 +120,8 @@ class App extends Component {
         })
     }
 
+    handleClearForm = () => this.setState({ user: {} });
+
     render() {
         const {
             user,
@@ -142,6 +144,7 @@ class App extends Component {
                     onGetUser={this.handleGetUser}
                     setShowBtn={this.setShowBtn}
                     activeLoadingModal={activeLoadingModal}
+                    onClearForm={this.handleClearForm}
                 />
             </div>
         )

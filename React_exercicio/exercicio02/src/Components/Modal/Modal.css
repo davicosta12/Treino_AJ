@@ -1,0 +1,9 @@
+.btnsModal {
+    display: flex;
+    justify-content: flex-end;
+    margin: 1.5em 0;
+}
+
+.btnsModal button {
+    margin-left: 1.5em;
+}

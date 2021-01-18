@@ -1,3 +1,4 @@
+import '../Totalizador/totalizador.css'
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -7,9 +8,8 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
+import Fab from '../Fab/Fab'
 
-import Totalizador from '../Totalizador/totalizador';
 
 const useStyles = makeStyles({
   table: {
@@ -19,7 +19,7 @@ const useStyles = makeStyles({
 
 const Tabela = props => {
   const [disableExcluir, setDisableExcluir] = useState([]);
-  const { users, user, onUpdateUser, onGetUser, onDeleteUser, isActiveLoadingModal } = props;
+  const { users, onGetUser, onDeleteUser, activeLoadingModal, setShowBtn, openModal } = props;
 
   useEffect(() => {
     setDisableExcluir(Array(users.length).fill(false))
@@ -37,10 +37,10 @@ const Tabela = props => {
   }
 
   const handleGetUser = (id) => {
-    props.setShowBtn('desactiveBtnCreate', false)
-    props.setShowBtn('desactiveBtnUpdate', true)
-    props.onGetUser(id, props.activeLoadingModal)
-    props.openModal()
+    setShowBtn('activeBtnCreate', false)
+    setShowBtn('activeBtnUpdate', true)
+    onGetUser(id, activeLoadingModal)
+    openModal()
   }
 
   const classes = useStyles();
@@ -66,29 +66,18 @@ const Tabela = props => {
                   <TableCell align="right"> {user.name} </TableCell>
                   <TableCell align="right"> {user.email} </TableCell>
                   <TableCell align="right">
-                    <Button
-                      color="primary"
-                      variant="contained"
-                      size="small"
-                      onClick={() => { handleDeleteUser(user.id, index) }}
-                      disabled={disableExcluir && disableExcluir[index]}
-                      className="button-secondary"
-                    >
-                      Excluir
-                    </Button>
+                    <Fab 
+                      onClickFunction={() => handleDeleteUser(user.id, index)}
+                      disabledDelet={disableExcluir && disableExcluir[index]}
+                      iconDelet={true}
+                    />
                   </TableCell>
                   <TableCell align="right">
-                    <Button
-                      color="primary"
-                      variant="contained"
-                      size="small"
-                      node="button"
-                      onClick={() => { handleGetUser(user.id)}}
-                      disabled={disableExcluir && disableExcluir[index]}
-                      data-target="modal1"
-                      className="modal-trigger"
-                    > Editar
-                    </Button>
+                    <Fab 
+                      onClickFunction={() => { handleGetUser(user.id)}}
+                      disabledEdit={disableExcluir && disableExcluir[index]}
+                      iconEdit={true}
+                    />
                   </TableCell>
                 </TableRow>
               ))
@@ -97,8 +86,7 @@ const Tabela = props => {
         </Table>
       </TableContainer>
     </React.Fragment>
-
-
+    
   )
 
 }

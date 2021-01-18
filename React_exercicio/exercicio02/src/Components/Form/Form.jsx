@@ -1,7 +1,8 @@
+import './Form.css'
 import React, { useState, useEffect } from 'react';
-import { Button } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
+import Fab from '../Fab/Fab'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -23,22 +24,36 @@ const Form = (props) => {
     const classes = useStyles();
 
     const [formData, setFormData] = useState(INITIAL_STATE);
-    const { desactiveBtnCreate, desactiveBtnUpdate } = props;
+    const { user, activeBtnCreate, activeBtnUpdate, onCloseModal, onEditUser, onCreateUser} = props;
 
     useEffect(() => {
-        setFormData(props.user)
-    }, [])
+        setFormData(user)
+    }, [user])
 
     const handleChange = ({ target: { name, value } }) => {
         setFormData({ ...formData, [name]: value })
     }
 
+    const CloseModal = () => {
+        onCloseModal()
+    }
+
+    const EditUser = () => {
+        onEditUser(formData)
+    }
+
+    const CreateUser = () => {
+        onCreateUser(formData)
+    }
+
     return (
         <>
         <form className={classes.root} noValidate autoComplete="off">
-            <div>
+            <div className="form">
+                {activeBtnCreate && <h2>Inserir usuário</h2>}
+                {activeBtnUpdate && <h2>Editar usuário</h2>}
                 <TextField
-                    disabled={props.desactiveBtnUpdate}
+                    disabled={activeBtnUpdate}
                     onChange={handleChange}
                     name="id"
                     label="Código"
@@ -54,28 +69,33 @@ const Form = (props) => {
                 <TextField
                     onChange={handleChange}
                     name="email"
-                    label="email"
+                    label="Email"
                     type="email"
                     value={formData.email}
+                />
+                <TextField
+                    onChange={handleChange}
+                    name="obs"
+                    label="Observações"
+                    type="text"
+                    value={formData.obs}
                 />
             </div>
         </form>
         <div className="btnsModal">
-            <Button
-                onClick={() => props.onClose()}
-                color="secondary"
-                variant="contained" >Close
-            </Button>
-            {desactiveBtnCreate && <Button
-                onClick={() => props.onCreateUser(formData)}
-                color="secondary"
-                variant="contained" >Create
-            </Button>}
-            {desactiveBtnUpdate && <Button
-                onClick={() => props.onEditUser(formData)}
-                color="secondary"
-                variant="contained" >Update
-            </Button>}
+            <Fab 
+                onClickFunction={CloseModal}
+                iconClose={true}
+            />
+            {activeBtnCreate && <Fab 
+                onClickFunction={CreateUser}
+                iconAddModal={true}
+                    
+            />}   
+            {activeBtnUpdate && <Fab 
+                onClickFunction={EditUser}
+                iconEditModal={true}  
+            />}
         </div>
         </>
     );

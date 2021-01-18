@@ -1,15 +1,32 @@
+import './App.css'
 import React, { Component } from 'react';
 import { getAllUsers, createUser, getUser, updateUser, deleteUser } from '../Services/UsersService';
 import Modal from '../Components/Modal/modal'
+import ShowAlert from '../Utils/ShowAlert'
+import ErrorHnadler from '../Utils/ErrorHandler'
+import isNotValid from '../Utils/validacoes'
 
+
+const INITIAL_STATE = {
+    id: '',
+    name: '',
+    email: '',
+    obs: '',
+}
 
 class App extends Component {
     state = {
         users: [],
         user: {},
-        desactiveBtnCreate: false,
-        desactiveBtnUpdate: false,
+        activeBtnCreate: false,
+        activeBtnUpdate: false,
         activeLoadingModal: false,
+        activeAlertSucess: false,
+        alertMessageSucess: '',
+        activeAlertError: false,
+        alertMessageError: '',
+        activeAlertInfo: false,
+        alertMessageInfo: '',
     }
 
     componentDidMount() {
@@ -17,14 +34,33 @@ class App extends Component {
     }
 
     setShowBtn = (nameBtn, boolean) => {
-        if (nameBtn === 'desactiveBtnCreate' && boolean === true) {
-            this.setState({ desactiveBtnCreate: true })
-        } else if (nameBtn === 'desactiveBtnCreate' && boolean === false) {
-            this.setState({ desactiveBtnCreate: false })
-        } else if (nameBtn === 'desactiveBtnUpdate' && boolean === true) {
-            this.setState({ desactiveBtnUpdate: true })
+        if (nameBtn === 'activeBtnCreate' && boolean === true) {
+            this.setState({ activeBtnCreate: true })
+        } else if (nameBtn === 'activeBtnCreate' && boolean === false) {
+            this.setState({ activeBtnCreate: false })
+        } else if (nameBtn === 'activeBtnUpdate' && boolean === true) {
+            this.setState({ activeBtnUpdate: true })
         } else {
-            this.setState({ desactiveBtnUpdate: false })
+            this.setState({ activeBtnUpdate: false })
+        }
+    }
+
+    isNotvalidUser = user => {
+        const booleanAndMessage = isNotValid([user.id, user.name, user.email, user.obs]);
+        const boolean = booleanAndMessage[0];
+        const message = booleanAndMessage[1];
+        if(boolean) {
+            this.setState({
+                activeAlertInfo: true,
+                alertMessageInfo: message,
+            })
+            window.setTimeout(() => {
+                this.setState({
+                    activeAlertInfo: false,
+                    alertMessageInfo: '',
+                })
+            }, 3000);
+            return true;
         }
     }
 
@@ -35,8 +71,17 @@ class App extends Component {
                 this.setState({ users }, () => resolve());
             }
             catch (error) {
-                alert(error);
+                this.setState({activeAlertError: true, alertMessageError: error})
                 reject(error);
+            }
+            finally {
+                this.setState({})
+                window.setTimeout(() => {
+                    this.setState({
+                        activeAlertError: false,
+                        alertMessageError: '',
+                    })
+                }, 3000);
             }
         })
     }
@@ -51,101 +96,154 @@ class App extends Component {
                     const data = await getUser(userId);
                     this.setState({ user: { ...data } }, () => resolve());
                 }
-                catch (err) {
-                    alert(err);
-                    reject(err);
+                catch (error) {
+                    this.setState({activeAlertError: true, alertMessageError: error})
+                    reject(error);
                 }
                 finally {
                     this.setState({ activeLoadingModal: false })
+                    window.setTimeout(() => {
+                        this.setState({
+                            activeAlertError: false,
+                            alertMessageError: '',
+                        })
+                    }, 3000);
                 }
             })
         })
     }
 
     handleCreateUser = async (user, handleClose) => {
+        if(this.isNotvalidUser(user)) return;   
         this.setState({ activeLoadingModal: true }, async () => {
             try {
                 const payload = { ...user }
                 await createUser(payload)
                 await this.getAllUsers()
-                alert("Usuário inserido com sucesso!")
+                this.setState({
+                    activeAlertSucess: true,
+                    alertMessageSucess: 'Usuário inserido',
+                })
             }
             catch (error) {
                 if (error.status === 404)
-                    alert('Código não localizado')
+                    this.setState({activeAlertError: true, alertMessageError:'Código não localizado'})
                 else if (error.response?.data?.message)
-                    alert(error.response.data.message)
+                    this.setState({activeAlertError: true, alertMessageError: error.response.data.message})
                 else
-                    alert(error)
+                    this.setState({activeAlertError: true, alertMessageError: error})
             }
             finally {
                 this.setState({ activeLoadingModal: false })
+                window.setTimeout(() => {
+                    this.setState({
+                        activeAlertSucess: false,
+                        activeAlertError: false,
+                        alertMessageSucess: '',
+                        alertMessageError: '',
+                    })
+                }, 3000);
                 handleClose()
             }
         })
     }
 
     handleUpdateUser = (user, handleClose) => {
+        if(this.isNotvalidUser(user)) return; 
         this.setState({ activeLoadingModal: true }, async () => {
             try {
                 const payload = { ...user }
                 const id = this.state.user.id
                 const data = await updateUser(id, payload)
                 await this.getAllUsers()
-                alert(data.message)
+                this.setState({
+                    activeAlertSucess: true,
+                    alertMessageSucess: data.message,
+                })
             }
             catch (error) {
-                alert(error)
+                this.setState({activeAlertError: true, alertMessageError: error})
             }
             finally {
                 this.setState({ activeLoadingModal: false })
+                window.setTimeout(() => {
+                    this.setState({
+                        activeAlertSucess: false,
+                        activeAlertError: false,
+                        alertMessageSucess: '',
+                        alertMessageError: '',
+                    })
+                }, 3000);
                 handleClose()
             }
         })
     }
 
     handleDeleteUser = (id) => {
-        this.setState({ activeLoadingExcluir: true }, async () => {
+        this.setState({ activeLoadingModal: true }, async () => {
             try {
                 await deleteUser(id)
                 await this.getAllUsers()
-                alert("Usuário deletado com sucesso")
+                this.setState({
+                    activeAlertSucess: true,
+                    alertMessageSucess: "Usuário deletado com sucesso",
+                })
             }
             catch (error) {
-                alert(error)
+                this.setState({activeAlertError: true, alertMessageError: error})
             }
             finally {
-                this.setState({ activeLoadingExcluir: false })
+                this.setState({ activeLoadingModal: false })
+                window.setTimeout(() => {
+                    this.setState({
+                        activeAlertSucess: false,
+                        activeAlertError: false,
+                        alertMessageSucess: '',
+                        alertMessageError: '',
+                    })
+                }, 3000);
             }
         })
     }
 
-    handleClearForm = () => this.setState({ user: {} });
+    handleClearForm = () => this.setState({ user: INITIAL_STATE });
 
     render() {
         const {
             user,
             users,
             activeLoadingModal,
-            desactiveBtnCreate,
-            desactiveBtnUpdate,
+            activeBtnCreate,
+            activeBtnUpdate,
+            activeAlertInfo,
+            alertMessageInfo,
         } = this.state;
 
         return (
             <div>
-                <Modal
-                    users={users}
-                    user={user}
-                    onDeleteUser={this.handleDeleteUser}
-                    onUpdateUser={this.handleUpdateUser}
-                    desactiveBtnCreate={desactiveBtnCreate}
-                    desactiveBtnUpdate={desactiveBtnUpdate}
-                    onCreateUser={this.handleCreateUser}
-                    onGetUser={this.handleGetUser}
-                    setShowBtn={this.setShowBtn}
-                    activeLoadingModal={activeLoadingModal}
-                    onClearForm={this.handleClearForm}
-                />
+                {this.state.activeAlertError && <ErrorHnadler 
+                    alertMessage={this.state.alertMessageError}
+                />}
+                {this.state.activeAlertSucess && <ShowAlert
+                    alertMessage={this.state.alertMessageSucess}
+                />}
+                <div className="div-Modal">
+                    <Modal
+                        users={users}
+                        user={user}
+                        onDeleteUser={this.handleDeleteUser}
+                        onUpdateUser={this.handleUpdateUser}
+                        activeBtnCreate={activeBtnCreate}
+                        activeBtnUpdate={activeBtnUpdate}
+                        onCreateUser={this.handleCreateUser}
+                        onGetUser={this.handleGetUser}
+                        setShowBtn={this.setShowBtn}
+                        activeLoadingModal={activeLoadingModal}
+                        onClearForm={this.handleClearForm}
+                        activeAlertInfo={activeAlertInfo}
+                        alertMessageInfo={alertMessageInfo}
+                    />
+                </div>
             </div>
         )
     }

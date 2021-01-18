@@ -1,7 +1,6 @@
 import './Loading.css'
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { styled } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 const useStyles = makeStyles((theme) => ({
@@ -13,18 +12,15 @@ const useStyles = makeStyles((theme) => ({
         '& > * + *': {
             marginLeft: theme.spacing(2),
         },
-
-        stylesLoading: {
-
-        },
     },
 }));
 
 const CircularIndeterminate = (props) => {
     const classes = useStyles();
+    const {activeLoadingModal} = props;
     return (
         <div className={classes.root} >
-            { props.activeLoadingModal && <CircularProgress className={classes.stylesLoading} />}
+            { activeLoadingModal && <CircularProgress className={classes.stylesLoading} />}
         </div>
     );
 }

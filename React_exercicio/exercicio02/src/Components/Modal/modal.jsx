@@ -5,9 +5,11 @@ import Modal from '@material-ui/core/Modal';
 import Form from '../Form/Form'
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
-import Button from '@material-ui/core/Button';
 import Table from '../Table/Table';
+import Fab from '../Fab/Fab'
 import Loading from '../Loading/Loading'
+import AlertWarn from '../../Utils/WarningAlert'
+import Totalizador from '../Totalizador/totalizador';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -27,30 +29,28 @@ const useStyles = makeStyles((theme) => ({
 
 const TransitionsModal = (props) => {
     const classes = useStyles();
-    const { user, users, onGetUser, onDeleteUser, onUpdateUser, setShowBtn,
-        activeLoadingModal, desactiveBtnUpdate, desactiveBtnCreate } = props;
+    const { user, users, onGetUser, onCreateUser, onDeleteUser, onUpdateUser, setShowBtn,
+        activeLoadingModal, activeBtnUpdate, activeBtnCreate, onClearForm, activeAlertInfo, alertMessageInfo } = props;
     const [open, setOpen] = useState(false);
 
-    // useEffect(() => {
-    //     if (!user?.id && formData.id) {
-    //         setFormData(INITIAL_STATE)
-    //     }
-    //     if (user?.id && user.id !== formData.id) {
-    //         setFormData({ ...user })
-    //     }
-
-    // }, [user.id])
-
     const clearFormData = () => {
-        props.onClearForm();
+        onClearForm();
     }
 
     const handleCreateUser = formData => {
-        props.onCreateUser(formData, handleClose)
+        onCreateUser(formData, handleClose)
     }
 
     const handleEditUser = formData => {
-        props.onUpdateUser(formData, handleClose)
+        onUpdateUser(formData, handleClose)
+    }
+
+    const hadleBtnAddUser = () => {
+        setShowBtn('activeBtnUpdate', false)
+        setShowBtn('activeBtnCreate', true)
+        // console.log(formData)
+        clearFormData()
+        handleOpen()
     }
 
     const handleOpen = () => {
@@ -89,11 +89,14 @@ const TransitionsModal = (props) => {
             >
                 <Fade in={open}>
                     <div className={classes.paper}>
+                        { activeAlertInfo  && <AlertWarn 
+                            alertMessage={alertMessageInfo}
+                        />}
                         <Form
                             user={user}
-                            desactiveBtnUpdate={desactiveBtnUpdate}
-                            desactiveBtnCreate={desactiveBtnCreate}
-                            onClose={handleClose}
+                            activeBtnUpdate={activeBtnUpdate}
+                            activeBtnCreate={activeBtnCreate}
+                            onCloseModal={handleClose}
                             onCreateUser={handleCreateUser}
                             onEditUser={handleEditUser}
                         />
@@ -101,23 +104,15 @@ const TransitionsModal = (props) => {
                     </div>
                 </Fade>
             </Modal>}
-
-            <Button
-                onClick={() => {
-                    setShowBtn('desactiveBtnUpdate', false)
-                    setShowBtn('desactiveBtnCreate', true)
-                    clearFormData()
-                    // console.log(formData)
-                    handleOpen()
-                }}
-                color="secondary"
-                variant="contained"
-                size="small"
-            >
-                Adicionar
-        </Button>
+            <div className="btnAdd">
+            <Totalizador users={users}></Totalizador> 
+                <Fab 
+                    onClickFunction={hadleBtnAddUser}
+                    iconAdd={true}
+                />
+            </div>
             <Loading activeLoadingModal={activeLoadingModal} />
-        </div>
+        </div >
     );
 }
 

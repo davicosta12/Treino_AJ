@@ -3,5 +3,11 @@
     text-align: center;
     text-transform: uppercase;
     font-weight: normal;
-    
+}
+
+
+
+.form div {
+    margin-bottom: .5em;
+    text-align: center;
 }

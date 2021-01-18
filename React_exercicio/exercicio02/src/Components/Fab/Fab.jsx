@@ -1,17 +1,18 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Fab from '@material-ui/core/Fab';
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import AddIcon from '@material-ui/icons/Add';
 import CloseIcon from '@material-ui/icons/Close';
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const useStyles = makeStyles((theme) => ({
     margin: {
-        margin: theme.spacing(1),
+        margin: theme.spacing(2),
     },
     extendedIcon: {
-        marginRight: theme.spacing(1),
+        marginLeft: theme.spacing(1),
     },
     root: {
         backgroundColor: 'red', 
@@ -27,68 +28,74 @@ const FloatingActionButtonSize = (props) => {
 
     return (
         <div>
-            {iconAdd && <Fab
-                onClick={onClickFunction}
-                variant="extended"
-                size="small"
-                color="primary"
-                aria-label="add"
-                className={classes.margin}>
-                <AddCircleOutlineIcon className={classes.extendedIcon} />
-          Adicionar
-        </Fab>}
-            {iconAddModal && <Fab
-                onClick={onClickFunction}
-                variant="extended"
-                size="small"
-                color="secundary"
-                aria-label="add"
-                className={classes.margin}>
-                <AddCircleOutlineIcon className={classes.extendedIcon} />
-            Confirmar
-            </Fab>}
-            {iconDelet && <Fab
-                onClick={onClickFunction}
-                disabled={disabledDelet}
-                variant="extended"
-                size="small"
-                color="secundary"
-                aria-label="add"
-                className={classes.margin}>
-                <DeleteForeverIcon className={classes.extendedIcon} />
-          Excluir
-        </Fab>}
-            {iconEdit && <Fab
-                onClick={onClickFunction}
-                disabled={disabledEdit}
-                variant="extended"
-                size="small"
-                color="primary"
-                aria-label="edit"
-                className={classes.margin}>
-                <CreateIcon className={classes.extendedIcon} />
-            Editar
-            </Fab>}
-            {iconEditModal && <Fab
-                onClick={onClickFunction}
-                variant="extended"
-                size="small"
-                color="secundary"
-                aria-label="edit"
-                className={classes.margin}>
-                <CreateIcon className={classes.extendedIcon} />
-          Confirmar
-        </Fab>}
-            {iconClose && <Fab
-                onClick={onClickFunction}
-                variant="extended"
-                size="small"
-                color="secundary"
-                aria-label="add"
-                className={classes.margin}>
-                <CloseIcon className={classes.extendedIcon} />
-          Fechar
-        </Fab>}
+            {iconAdd && 
+            <Tooltip title="Adicionar" >
+                <Fab
+                    onClick={onClickFunction}
+                    color="primary"
+                    aria-label="add"
+                    className={classes.margin}>
+                        <AddIcon />
+                </Fab>
+            </Tooltip>}
+        
+            {iconAddModal && 
+            <Tooltip title="Confirmar" >
+                <Fab
+                    onClick={onClickFunction}
+                    size="medium"
+                    color="secundary"
+                    aria-label="add"
+                    className={classes.margin}>
+                    <AddIcon />
+                    </Fab>
+            </Tooltip>}
+            {iconDelet && 
+            <Tooltip title="Excluir" >
+                <Fab
+                    onClick={onClickFunction}
+                    disabled={disabledDelet}
+                    size="medium"
+                    color="secundary"
+                    aria-label="add"
+                    className={classes.margin}>
+                    <DeleteForeverIcon />
+                    </Fab>
+            </Tooltip>}
+            {iconEdit && 
+            <Tooltip title="Editar">
+                <Fab
+                    onClick={onClickFunction}
+                    disabled={disabledEdit}
+                    size="medium"
+                    color="primary"
+                    aria-label="edit"
+                    className={classes.margin}>
+                    <CreateIcon />
+                    </Fab>
+            </Tooltip>}
+            {iconEditModal && 
+            <Tooltip title="Confirmar" >
+                <Fab
+                    onClick={onClickFunction}
+                    size="medium"
+                    color="secundary"
+                    aria-label="edit"
+                    className={classes.margin}>
+                    <CreateIcon />
+                 </Fab>
+            </Tooltip>}
+            {iconClose && 
+            <Tooltip title="Fechar" >
+                <Fab
+                    onClick={onClickFunction}
+                    size="medium"
+                    color="secundary"
+                    aria-label="add"
+                    className={classes.margin}>
+                    <CloseIcon />
+                </Fab>
+            </Tooltip>}
         </div>
 
     );

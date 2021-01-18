@@ -24,7 +24,7 @@ const Form = (props) => {
     const classes = useStyles();
 
     const [formData, setFormData] = useState(INITIAL_STATE);
-    const { user, activeBtnCreate, activeBtnUpdate, onCloseModal, onEditUser, onCreateUser} = props;
+    const { user, activeBtnCreate, activeBtnUpdate, onCloseModal, onEditUser, onCreateUser } = props;
 
     useEffect(() => {
         setFormData(user)
@@ -48,55 +48,74 @@ const Form = (props) => {
 
     return (
         <>
-        <form className={classes.root} noValidate autoComplete="off">
-            <div className="form">
-                {activeBtnCreate && <h2>Inserir usuário</h2>}
-                {activeBtnUpdate && <h2>Editar usuário</h2>}
-                <TextField
-                    disabled={activeBtnUpdate}
-                    onChange={handleChange}
-                    name="id"
-                    label="Código"
-                    type="text"
-                    value={formData.id}
+            <form className={classes.root} noValidate autoComplete="off">
+                <div className="form">
+                    {activeBtnCreate && <h2>Inserir usuário</h2>}
+                    {activeBtnUpdate && <h2>Editar usuário</h2>}
+                    <div>
+                        <TextField
+                            disabled={activeBtnUpdate}
+                            onChange={handleChange}
+                            size="small"
+                            name="id"
+                            label="Código"
+                            type="text"
+                            value={formData.id}
+                            variant="outlined"
+                        />
+                    </div>
+                    <div className="form-div-name">
+                        <TextField
+                            onChange={handleChange}
+                            size="small"
+                            name="name"
+                            label="Nome"
+                            value={formData.name}
+                            variant="outlined"
+                        />
+                    </div>
+                    <div>
+                        <TextField
+                            onChange={handleChange}
+                            size="small"
+                            name="email"
+                            label="Email"
+                            type="email"
+                            value={formData.email}
+                            variant="outlined"
+                        />
+                    </div>
+                    <div>
+                        <TextField
+                            onChange={handleChange}
+                            size="small"
+                            id="outlined-multiline-static"
+                            name="obs"
+                            label="Observações"
+                            multiline
+                            rows={4}
+                            type="text"
+                            value={formData.obs}
+                            variant="outlined"
+                        />
+                    </div>
+                </div>
+            </form>
+            <div className="btnsModal">
+                <Fab
+                    onClickFunction={CloseModal}
+                    iconClose={true}
                 />
-                <TextField
-                    onChange={handleChange}
-                    name="name"
-                    label="Nome"
-                    value={formData.name}
-                />
-                <TextField
-                    onChange={handleChange}
-                    name="email"
-                    label="Email"
-                    type="email"
-                    value={formData.email}
-                />
-                <TextField
-                    onChange={handleChange}
-                    name="obs"
-                    label="Observações"
-                    type="text"
-                    value={formData.obs}
-                />
+                {activeBtnCreate && <Fab
+                    onClickFunction={CreateUser}
+                    iconAddModal={true}
+
+                />}
+                {activeBtnUpdate && <Fab
+                    onClickFunction={EditUser}
+                    iconEditModal={true}
+                />}
             </div>
-        </form>
-        <div className="btnsModal">
-            <Fab 
-                onClickFunction={CloseModal}
-                iconClose={true}
-            />
-            {activeBtnCreate && <Fab 
-                onClickFunction={CreateUser}
-                iconAddModal={true}
-                    
-            />}   
-            {activeBtnUpdate && <Fab 
-                onClickFunction={EditUser}
-                iconEditModal={true}  
-            />}
-        </div>
         </>
     );
 }

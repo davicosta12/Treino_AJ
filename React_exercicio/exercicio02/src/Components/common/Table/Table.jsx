@@ -1,4 +1,4 @@
-import '../Totalizador/totalizador.css'
+import '../../Totalizador/totalizador.css'
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -13,7 +13,7 @@ import Fab from '../Fab/Fab'
 
 const useStyles = makeStyles({
   table: {
-    minWidth: 650,
+    minWidth: 1050,
   },
 });
 
@@ -48,34 +48,42 @@ const Tabela = props => {
   return (
     <React.Fragment>
       <TableContainer component={Paper}>
-        <Table className={classes.table} size="small" aria-label="a dense table" size="medium">
+        <Table className={classes.table} size="small" aria-label="a dense table">
           <TableHead>
             <TableRow>
               <TableCell>Código</TableCell>
-              <TableCell align="right">Nome</TableCell>
-              <TableCell align="right">Email</TableCell>
-              <TableCell align="right"></TableCell>
-              <TableCell align="right"></TableCell>
+              <TableCell>Nome</TableCell>
+              <TableCell>Email</TableCell>
+              <TableCell></TableCell>
+              <TableCell></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {
               users.map((user, index) => (
                 <TableRow key={user.id}>
-                  <TableCell align="left"> {user.id} </TableCell>
-                  <TableCell align="right"> {user.name} </TableCell>
-                  <TableCell align="right"> {user.email} </TableCell>
-                  <TableCell align="right">
-                    <Fab 
+                  <TableCell> {user.id} </TableCell>
+                  <TableCell> {user.name} </TableCell>
+                  <TableCell> {user.email} </TableCell>
+                  <TableCell>
+                    <Fab
                       onClickFunction={() => handleDeleteUser(user.id, index)}
-                      disabledDelet={disableExcluir && disableExcluir[index]}
+                      variant="round"
+                      title="Excluir"
+                      size="small"
+                      color="secondary"
+                      disabled={disableExcluir && disableExcluir[index]}
                       iconDelet={true}
                     />
                   </TableCell>
-                  <TableCell align="right">
-                    <Fab 
-                      onClickFunction={() => { handleGetUser(user.id)}}
-                      disabledEdit={disableExcluir && disableExcluir[index]}
+                  <TableCell>
+                    <Fab
+                      onClickFunction={() => { handleGetUser(user.id) }}
+                      variant="round"
+                      title="Editar"
+                      size="small"
+                      color="primary"
+                      disabled={disableExcluir && disableExcluir[index]}
                       iconEdit={true}
                     />
                   </TableCell>
@@ -86,7 +94,6 @@ const Tabela = props => {
         </Table>
       </TableContainer>
     </React.Fragment>
-    
   )
 
 }

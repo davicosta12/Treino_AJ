@@ -1,6 +1,7 @@
-import '../../Totalizador/totalizador.css'
+import './Totalizador/totalizador.css'
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import Totalizador from './Totalizador/totalizador'
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -9,6 +10,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Fab from '../Fab/Fab'
+import { TableFooter } from '@material-ui/core';
 
 
 const useStyles = makeStyles({
@@ -19,11 +21,11 @@ const useStyles = makeStyles({
 
 const Tabela = props => {
   const [disableExcluir, setDisableExcluir] = useState([]);
-  const { users, onGetUser, onDeleteUser, activeLoadingModal, setShowBtn, openModal } = props;
+  const { onGetUser, onDeleteUser, activeLoadingModal, setShowBtn, openModal, TableheadItens, TableBodyItens } = props;
 
   useEffect(() => {
-    setDisableExcluir(Array(users.length).fill(false))
-  }, [users.length])
+    setDisableExcluir(Array(TableBodyItens.length).fill(false))
+  }, [TableBodyItens.length])
 
   const handleDisableExcluir = (index, value) => {
     const _disableExcluir = [...disableExcluir];
@@ -51,16 +53,14 @@ const Tabela = props => {
         <Table className={classes.table} size="small" aria-label="a dense table">
           <TableHead>
             <TableRow>
-              <TableCell>Código</TableCell>
-              <TableCell>Nome</TableCell>
-              <TableCell>Email</TableCell>
+              {TableheadItens.map((item, index) => <TableCell key={index}>{item}</TableCell>)}
               <TableCell></TableCell>
               <TableCell></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {
-              users.map((user, index) => (
+              TableBodyItens.map((user, index) => (
                 <TableRow key={user.id}>
                   <TableCell> {user.id} </TableCell>
                   <TableCell> {user.name} </TableCell>
@@ -91,6 +91,7 @@ const Tabela = props => {
               ))
             }
           </TableBody>
+          <TableFooter><Totalizador TableBodyItens={TableBodyItens}></Totalizador></TableFooter>
         </Table>
       </TableContainer>
     </React.Fragment>

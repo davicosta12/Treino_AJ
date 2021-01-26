@@ -2,11 +2,10 @@ import './Modal.css'
 import React, { useState } from 'react';
 import Dialog from '@material-ui/core/Dialog';
 import Slide from '@material-ui/core/Slide';
-import Form from '../../Components/Form/Form'
-import Table from '../../Components/common/Table/Table';
-import Fab from '../../Components/common/Fab/Fab'
-import Loading from '../../Components/common/Loading/Loading'
-import Totalizador from '../../Components/Totalizador/totalizador';
+import Form from '../../Usuarios/Form/Form'
+import Table from '../../common/Table/Table';
+import Fab from '../../common/Fab/Fab'
+import Loading from '../../common/Loading/Loading'
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -50,8 +49,8 @@ const Modal = (props) => {
     <div>
       <div>
         <Table
-          users={users}
-          user={user}
+          TableBodyItens={[...users]}
+          TableheadItens={['Código', 'Nome', 'Email']}
           onGetUser={onGetUser}
           onDeleteUser={onDeleteUser}
           onUpdateUser={onUpdateUser}
@@ -79,7 +78,6 @@ const Modal = (props) => {
         />
       </Dialog>}
       <div className="btnAdd">
-        <Totalizador users={users}></Totalizador>
         <Fab
           title="Adicionar"
           variant="round"

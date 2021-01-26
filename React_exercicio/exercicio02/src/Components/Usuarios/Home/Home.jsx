@@ -1,28 +1,23 @@
 import React, { Component } from 'react';
 import { getAllUsers, createUser, getUser, updateUser, deleteUser } from '../../../Services/UsersService';
-import Modal from '../../Modal/modal'
+import Modal from '../Modal/modal'
 import checkValidation from '../../../Utils/validacoes'
 import Snackbar from '../../common/Snackbar/Snackbar'
 
 
 const INITIAL_STATE = {
-  id: '',
-  name: '',
-  email: '',
-  obs: '',
+  users: [],
+  user: {},
+  activeBtnCreate: false,
+  activeBtnUpdate: false,
+  activeLoadingModal: false,
+  activeShowbar: false,
+  showbarMessage: '',
+  severityShowbar: '',
 }
 
 class Home extends Component {
-  state = {
-    users: [],
-    user: {},
-    activeBtnCreate: false,
-    activeBtnUpdate: false,
-    activeLoadingModal: false,
-    activeShowbar: false,
-    showbarMessage: '',
-    severityShowbar: '',
-  }
+  state = INITIAL_STATE
 
   async componentDidMount() {
     this.setState({ activeLoadingModal: true })
@@ -102,7 +97,7 @@ class Home extends Component {
   handleGetUser = async (userId) => {
     return new Promise((resolve, reject) => {
       this.setState({
-        user: {},
+        user: {id: '', name: '', email: '', obs: ''},
         activeLoadingModal: true,
       }, async () => {
         try {
@@ -181,7 +176,7 @@ class Home extends Component {
     })
   }
 
-  handleClearForm = () => this.setState({ user: INITIAL_STATE });
+  handleClearForm = () => this.setState({ user: {id: '', name: '', email: '', obs: ''} });
 
   render() {
     const {

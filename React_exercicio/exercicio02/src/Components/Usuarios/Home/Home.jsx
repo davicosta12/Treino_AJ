@@ -1,28 +1,31 @@
 import React, { Component } from 'react';
 import { getAllUsers, createUser, getUser, updateUser, deleteUser } from '../../../Services/UsersService';
-import Modal from '../Modal/modal'
+import Modal from '../Modal/Modal'
 import checkValidation from '../../../Utils/validacoes'
 import Snackbar from '../../common/Snackbar/Snackbar'
+import Table from '../../common/Table/Table';
+import Fab from '../../common/Fab/Fab'
+import Loading from '../../common/Loading/Loading'
 
 
 const INITIAL_STATE = {
   users: [],
-  user: {},
-  activeBtnCreate: false,
-  activeBtnUpdate: false,
+  user: { id: '', name: '', email: '', obs: '' },
+  createMode: true,  // true: Modo de criação / false: Modo de edição
   activeLoadingModal: false,
   activeShowbar: false,
   showbarMessage: '',
   severityShowbar: '',
+  openModal: false,
 }
 
 class Home extends Component {
   state = INITIAL_STATE
 
-  async componentDidMount() {
-    this.setState({ activeLoadingModal: true })
-    await this.getAllUsers()
-    this.setState({ activeLoadingModal: false })
+  componentDidMount() {
+    this.setState({ activeLoadingModal: true }, async () => {
+      await this.getAllUsers()
+    });
   }
 
   setShowbar = () => {
@@ -31,18 +34,6 @@ class Home extends Component {
       showbarMessage: '',
       severityShowbar: '',
     })
-  }
-
-  setShowBtn = (nameBtn, boolean) => {
-    if (nameBtn === 'activeBtnCreate' && boolean === true) {
-      this.setState({ activeBtnCreate: true })
-    } else if (nameBtn === 'activeBtnCreate' && boolean === false) {
-      this.setState({ activeBtnCreate: false })
-    } else if (nameBtn === 'activeBtnUpdate' && boolean === true) {
-      this.setState({ activeBtnUpdate: true })
-    } else {
-      this.setState({ activeBtnUpdate: false })
-    }
   }
 
   isNotvalidUser = user => {
@@ -89,7 +80,7 @@ class Home extends Component {
         reject(error);
       }
       finally {
-        this.setState({})
+        this.setState({ activeLoadingModal: false });
       }
     })
   }
@@ -97,7 +88,7 @@ class Home extends Component {
   handleGetUser = async (userId) => {
     return new Promise((resolve, reject) => {
       this.setState({
-        user: {id: '', name: '', email: '', obs: ''},
+        user: { ...INITIAL_STATE.user },
         activeLoadingModal: true,
       }, async () => {
         try {
@@ -115,7 +106,7 @@ class Home extends Component {
     })
   }
 
-  handleCreateUser = async (user, handleClose) => {
+  handleCreateUser = async (user) => {
     if (this.isNotvalidUser(user)) return;
     this.setState({ activeLoadingModal: true }, async () => {
       try {
@@ -134,12 +125,11 @@ class Home extends Component {
       }
       finally {
         this.setState({ activeLoadingModal: false })
-        handleClose()
       }
     })
   }
 
-  handleUpdateUser = (user, handleClose) => {
+  handleUpdateUser = (user) => {
     if (this.isNotvalidUser(user)) return;
     this.setState({ activeLoadingModal: true }, async () => {
       try {
@@ -154,7 +144,7 @@ class Home extends Component {
       }
       finally {
         this.setState({ activeLoadingModal: false })
-        handleClose()
+        this.handleCloseModal();
       }
     })
   }
@@ -170,21 +160,42 @@ class Home extends Component {
         this.errorHandler(error, 'error')
       }
       finally {
-        this.setState({ activeLoadingModal: false })
-
+        this.setState({ activeLoadingModal: false });
+        this.handleCloseModal();
       }
     })
   }
 
-  handleClearForm = () => this.setState({ user: {id: '', name: '', email: '', obs: ''} });
+  handleClearForm = () => this.setState({ user: { ...INITIAL_STATE.user } });
+
+  handleClickAddBtn = () => {
+    this.setState({
+      createMode: true,
+      openModal: true,
+    }, () => {
+      this.handleClearForm();
+    });
+  }
+
+  handleClickEditBtn = async id => {
+    await this.handleGetUser(id);
+    this.setState({
+      createMode: false,
+      openModal: true,
+    });
+  }
+
+  handleOpenModal = () => this.setState({ openModal: true })
+
+  handleCloseModal = () => this.setState({ openModal: false })
 
   render() {
     const {
       user,
       users,
+      createMode,
+      openModal,
       activeLoadingModal,
-      activeBtnCreate,
-      activeBtnUpdate,
       activeShowbar,
       showbarMessage,
       severityShowbar,
@@ -192,6 +203,7 @@ class Home extends Component {
 
     return (
       <div>
+
         <Snackbar
           activeShowbar={activeShowbar}
           showbarMessage={showbarMessage}
@@ -199,21 +211,40 @@ class Home extends Component {
           severity={severityShowbar}
         />
 
-        <div className="div-Modal">
-          <Modal
-            users={users}
-            user={user}
-            onDeleteUser={this.handleDeleteUser}
-            onUpdateUser={this.handleUpdateUser}
-            activeBtnCreate={activeBtnCreate}
-            activeBtnUpdate={activeBtnUpdate}
-            onCreateUser={this.handleCreateUser}
-            onGetUser={this.handleGetUser}
-            setShowBtn={this.setShowBtn}
-            activeLoadingModal={activeLoadingModal}
-            onClearForm={this.handleClearForm}
+        <Table
+          items={users}
+          columns={[
+            { name: 'id', label: 'Código'},
+            { name: 'name', label: 'Nome' },
+            { name: 'email', label: 'Email' },
+          ]}
+          onClickEditBtn={this.handleClickEditBtn}
+          onClickDeleteBtn={this.handleDeleteUser}
+        />
+
+        <Modal
+          open={openModal}
+          user={user}
+          createMode={createMode}
+          onClose={this.handleCloseModal}
+          onCreateUser={this.handleCreateUser}
+          onUpdateUser={this.handleUpdateUser}
+        />
+
+        <div className="btnAdd">
+          <Fab
+            title="Adicionar"
+            variant="round"
+            size="small"
+            label="add"
+            color="primary"
+            iconAdd={true}
+            onClick={this.handleClickAddBtn}
           />
         </div>
+
+        <Loading activeLoadingModal={activeLoadingModal} />
+
       </div>
     )
   }

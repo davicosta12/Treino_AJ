@@ -1,7 +1,6 @@
-import './Totalizador/totalizador.css'
+import './table.css';
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Totalizador from './Totalizador/totalizador'
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -9,8 +8,8 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import Fab from '../Fab/Fab'
 import { TableFooter } from '@material-ui/core';
+import Fab from '../Fab/Fab'
 
 
 const useStyles = makeStyles({
@@ -21,11 +20,11 @@ const useStyles = makeStyles({
 
 const Tabela = props => {
   const [disableExcluir, setDisableExcluir] = useState([]);
-  const { onGetUser, onDeleteUser, activeLoadingModal, setShowBtn, openModal, TableheadItens, TableBodyItens } = props;
+  const { onClickEditBtn, onClickDeleteBtn, columns, items } = props;
 
   useEffect(() => {
-    setDisableExcluir(Array(TableBodyItens.length).fill(false))
-  }, [TableBodyItens.length])
+    setDisableExcluir(Array(items.length).fill(false))
+  }, [items.length])
 
   const handleDisableExcluir = (index, value) => {
     const _disableExcluir = [...disableExcluir];
@@ -33,16 +32,13 @@ const Tabela = props => {
     setDisableExcluir(_disableExcluir);
   }
 
-  const handleDeleteUser = (id, index) => {
+  const handleBtnDelete = (id, index) => {
     setDisableExcluir(() => handleDisableExcluir(index, true));
-    onDeleteUser(id)
+    onClickDeleteBtn(id)
   }
 
-  const handleGetUser = (id) => {
-    setShowBtn('activeBtnCreate', false)
-    setShowBtn('activeBtnUpdate', true)
-    onGetUser(id, activeLoadingModal)
-    openModal()
+  const handleBtnEdit = (id) => {
+    onClickEditBtn(id)
   }
 
   const classes = useStyles();
@@ -53,21 +49,19 @@ const Tabela = props => {
         <Table className={classes.table} size="small" aria-label="a dense table">
           <TableHead>
             <TableRow>
-              {TableheadItens.map((item, index) => <TableCell key={index}>{item}</TableCell>)}
+              { columns.map((col, i) => <TableCell key={i}> {col.label} </TableCell>) }
               <TableCell></TableCell>
               <TableCell></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {
-              TableBodyItens.map((user, index) => (
-                <TableRow key={user.id}>
-                  <TableCell> {user.id} </TableCell>
-                  <TableCell> {user.name} </TableCell>
-                  <TableCell> {user.email} </TableCell>
+              items.map((item, index) => (
+                <TableRow key={index}>
+                  { columns.map((col, i) => <TableCell key={i}> {item[col.name]} </TableCell>) }
                   <TableCell>
                     <Fab
-                      onClickFunction={() => handleDeleteUser(user.id, index)}
+                      onClick={() => handleBtnDelete(item.id, index)}
                       variant="round"
                       title="Excluir"
                       size="small"
@@ -78,7 +72,7 @@ const Tabela = props => {
                   </TableCell>
                   <TableCell>
                     <Fab
-                      onClickFunction={() => { handleGetUser(user.id) }}
+                      onClick={() => { handleBtnEdit(item.id) }}
                       variant="round"
                       title="Editar"
                       size="small"
@@ -91,7 +85,18 @@ const Tabela = props => {
               ))
             }
           </TableBody>
-          <TableFooter><Totalizador TableBodyItens={TableBodyItens}></Totalizador></TableFooter>
+          <TableFooter>
+            { 
+              /* TableRow e TableCell adicionados p/ remover o warning do console: 
+                <div> cannot appear as a child of <tfoot> 
+              */
+            }
+            <TableRow>
+              <TableCell className='totalizador'>
+                <p>Total: <span>{ items.length }</span></p>
+              </TableCell>
+            </TableRow>
+          </TableFooter>
         </Table>
       </TableContainer>
     </React.Fragment>

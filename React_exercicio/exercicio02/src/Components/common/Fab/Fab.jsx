@@ -19,14 +19,16 @@ const useStyles = makeStyles((theme) => ({
 
 const FloatingActionButtonSize = (props) => {
   const classes = useStyles()
-  const { onClickFunction, disabled, iconAdd, iconDelet, iconEdit, iconClose, iconCheck,
-    title, color, label, size, variant, textComponent} = props;
+  const {
+    onClick, disabled, iconAdd, iconDelet, iconEdit, iconClose, iconCheck,
+    title, color, label, size, variant, textComponent
+  } = props;
 
   return (
     <div>
       <Tooltip title={title} >
         <Fab
-          onClick={onClickFunction}
+          onClick={onClick}
           color={color}
           variant={variant}
           size={size}
@@ -37,9 +39,8 @@ const FloatingActionButtonSize = (props) => {
           {iconEdit && <CreateIcon />}
           {iconDelet && <DeleteForeverIcon />}
           {iconClose && <CloseIcon />}
-          {iconClose ? textComponent: ''}
           {iconCheck && <CheckIcon />}
-          {iconCheck ? textComponent: ''}
+          {(iconClose || iconCheck) ? textComponent: ''}
         </Fab>
       </Tooltip>
     </div>

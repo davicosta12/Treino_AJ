@@ -16,8 +16,9 @@ const INITIAL_STATE = {
 
 const Form = (props) => {
 	const [formData, setFormData] = useState(INITIAL_STATE);
-	const { user, activeBtnCreate, activeBtnUpdate, onCloseModal, onEditUser, onCreateUser } = props;
+	const { user, createMode, onCloseModal, onConfirmEdit, onConfirmCreate } = props;
 	const { id, name, email, obs } = formData;
+
 	useEffect(() => {
 		setFormData(user)
 	}, [user])
@@ -26,30 +27,31 @@ const Form = (props) => {
 		setFormData({ ...formData, [name]: value })
 	}
 
-	const CloseModal = () => {
+	const handleCloseModal = () => {
 		onCloseModal()
 	}
 
-	const EditUser = () => {
-		onEditUser(formData)
+	const handleConfirmEdit = () => {
+		onConfirmEdit(formData)
 	}
 
-	const CreateUser = () => {
-		onCreateUser(formData)
+	const handleConfirmCreate = () => {
+		onConfirmCreate(formData)
 	}
 
 	return (
 		<>
 			<div className="title">
-				{activeBtnCreate && <DialogTitle id="alert-dialog-title">{"Criar usuário"}</DialogTitle>}
-				{activeBtnUpdate && <DialogTitle id="alert-dialog-title">{"Editar usuário"}</DialogTitle>}
+				<DialogTitle id="alert-dialog-title">
+					{ `${(createMode ? "Criar" : "Editar")} usuário` }
+				</DialogTitle>
 			</div>
 
 			<DialogContent>
 				<div className="form">
 					<div className="form-div-codigo">
 						<TextField
-							disabled={activeBtnUpdate}
+							disabled={!createMode}
 							onChange={handleChange}
 							placeholder="Digite o código"
 							id="id"
@@ -75,7 +77,6 @@ const Form = (props) => {
 							variant="standard"
 							margin="normal"
 							fullWidth
-
 						/>
 					</div>
 					<div>
@@ -115,7 +116,7 @@ const Form = (props) => {
 			<DialogActions>
 				<div className="btnsModal">
 					<Fab
-						onClickFunction={CloseModal}
+						onClick={handleCloseModal}
 						variant="extended"
 						title="Fechar"
 						size="small"
@@ -123,8 +124,8 @@ const Form = (props) => {
 						color="secondary"
 						iconClose={true}
 					/>
-					{(activeBtnCreate || activeBtnUpdate) && <Fab
-						onClickFunction={activeBtnCreate ? CreateUser : EditUser}
+					<Fab
+						onClick={createMode ? handleConfirmCreate : handleConfirmEdit}
 						variant="extended"
 						title="Confirmar"
 						size="small"
@@ -132,7 +133,7 @@ const Form = (props) => {
 						textComponent="Confirmar"
 						color="primary"
 						iconCheck={true}
-					/>}
+					/>
 				</div>
 			</DialogActions>
 		</>

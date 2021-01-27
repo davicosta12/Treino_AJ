@@ -1,0 +1,8 @@
+.totalizador {
+    font-weight: 500 !important;
+    font-size: 15px !important;
+    line-height: 1em !important;
+    padding: 0 1em !important;
+    color: rgba(0, 0, 0, 0.87) !important;
+    text-transform: uppercase;
+}

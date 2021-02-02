@@ -1,0 +1,35 @@
+.Menu {
+  border: 2px solid black;
+}
+
+.Menu nav ul {
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.Menu nav ul li {
+  margin: 6px 2em;
+  color: black;
+  font-size: 16px;
+  font-weight: 700;
+} 
+
+.Menu-ul-li-p {
+  margin: 0;
+}
+
+.Menu nav ul a {
+  text-decoration: none;
+  
+}
+
+.leftSide {
+  display: flex;
+}
+
+.rightSide {
+  display: flex;
+}

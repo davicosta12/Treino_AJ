@@ -1,0 +1,24 @@
+.btnsModal {
+    display: flex;
+    justify-content: flex-end;
+   
+}
+
+.btnsModal {
+    margin-right: 1.3em;
+}
+
+.btnsModal button {
+    margin: 0 .5em 1em .7em;
+}
+
+.btnAdd {
+    display: flex;
+    justify-content: flex-end; 
+}
+
+.textArea {
+    margin-bottom: 0;
+}
+
+

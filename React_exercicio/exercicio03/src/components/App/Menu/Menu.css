@@ -1,35 +1,23 @@
-.Menu {
-  border: 2px solid black;
-}
-
-.Menu nav ul {
-  display: flex;
-  justify-content: space-between;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.Menu nav ul li {
-  margin: 6px 2em;
-  color: black;
-  font-size: 16px;
-  font-weight: 700;
-} 
-
-.Menu-ul-li-p {
-  margin: 0;
-}
-
-.Menu nav ul a {
+.link-menu {
   text-decoration: none;
-  
+  color: rgb(99, 99, 99);
+  transition: .5s;
 }
 
-.leftSide {
-  display: flex;
+.link-menu:hover {
+  color: rgb(1, 1, 201);
 }
 
-.rightSide {
-  display: flex;
+.link-btn-menu {
+  color: white;
+  margin-right: 1em;
+  font-size: 18px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: .5s;
 }
+
+.link-btn-menu:hover {
+  color: rgb(228, 226, 226);
+}
+

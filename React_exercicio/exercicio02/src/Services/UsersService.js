@@ -1,50 +1,47 @@
-import axios from 'axios';
+import BaseService from './BaseService';
 
-const API_URL = 'http://127.0.0.1:5000';
+class UsersService extends BaseService {
 
-// GET /users
-const getAllUsers = () => {
-  return new Promise((resolve, reject) => {
-  axios.get(`${API_URL}/users`)
-    .then(resp => resolve(resp.data))
-    .catch(error => reject(error))
-  })
+  // GET /users
+  getAllUsers() {
+    return new Promise((resolve, reject) => {
+      this.getApi().get(`/users`)
+        .then(resp => resolve(resp.data)).catch(reject)
+    })
+  }
+
+  // GET /users/:id
+  getUser(id) {
+    return new Promise((resolve, reject) => {
+      this.getApi().get(`/users/${id}`)
+        .then(resp => resolve(resp.data)).catch(reject)
+    })
+  }
+
+  // POST /users
+  createUser(payload) {
+    return new Promise((resolve, reject) => {
+      this.getApi().post(`/users`, payload)
+        .then(resp => resolve(resp)).catch(reject)
+    })
+  }
+
+  // PUT /users/:id
+  updateUser(id, payload) {
+    return new Promise((resolve, reject) => {
+      this.getApi().put(`/users/${id}`, payload)
+        .then(resp => resolve(resp.data)).catch(reject)
+    })
+  }
+
+  // DELETE /users/:id
+  deleteUser(id) {
+    return new Promise((resolve, reject) => {
+      this.getApi().delete(`/users/${id}`)
+        .then(() => resolve("Usuário excluído com sucesso")).catch(reject)
+    });
+  }
+
 }
 
-// GET /users/:id
-const getUser = id => {
-  return new Promise((resolve, reject) => {
-    axios.get(`${API_URL}/users/${id}`)
-    .then(resp => resolve(resp.data))
-    .catch(error => reject(error))
-  })
-}
-
-// POST /users
-const createUser = payload => {
-  return new Promise((resolve, reject) => {
-    axios.post(`${API_URL}/users`, payload)
-    .then(resp => resolve(resp))
-    .catch(error => reject(error))
-  })
-}
-
-// PUT /users/:id
-const updateUser = (id, payload) => {
-  return new Promise((resolve, reject) => {
-    axios.put(`${API_URL}/users/${id}`, payload)
-    .then(resp => resolve(resp.data))
-    .catch(error => reject(error))
-  })
-}
-
-// DELETE /users/:id
-const deleteUser = id => {
-  return new Promise((resolve, reject) => {
-    axios.delete(`${API_URL}/users/${id}`)
-    .then(() => resolve("Usuário excluído com sucesso"))
-    .catch(error => reject(error))
-  });
-}
-
-export {getAllUsers, createUser, getUser, updateUser, deleteUser } ;
+export default UsersService;

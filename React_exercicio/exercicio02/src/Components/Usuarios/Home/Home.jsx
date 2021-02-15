@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { getAllUsers, createUser, getUser, updateUser, deleteUser } from '../../../Services/UsersService';
 import Modal from '../Modal/Modal'
+import UsersService from '../../../Services/UsersService';
 import checkValidation from '../../../Utils/validacoes'
 import Snackbar from '../../common/Snackbar/Snackbar'
 import Table from '../../common/Table/Table';
@@ -20,9 +20,13 @@ const INITIAL_STATE = {
 }
 
 class Home extends Component {
-  state = INITIAL_STATE
+  
+  state = INITIAL_STATE;
+
+  usersService = null;
 
   componentDidMount() {
+    this.usersService = new UsersService();
     this.setState({ activeLoadingModal: true }, async () => {
       await this.getAllUsers()
     });
@@ -72,7 +76,7 @@ class Home extends Component {
   getAllUsers = () => {
     return new Promise(async (resolve, reject) => {
       try {
-        const users = await getAllUsers();
+        const users = await this.usersService.getAllUsers();
         this.setState({ users }, () => resolve());
       }
       catch (error) {
@@ -92,7 +96,7 @@ class Home extends Component {
         activeLoadingModal: true,
       }, async () => {
         try {
-          const data = await getUser(userId);
+          const data = await this.usersService.getUser(userId);
           this.setState({ user: { ...data } }, () => resolve());
         }
         catch (error) {
@@ -111,7 +115,7 @@ class Home extends Component {
     this.setState({ activeLoadingModal: true }, async () => {
       try {
         const payload = { ...user }
-        await createUser(payload)
+        await this.usersService.createUser(payload)
         await this.getAllUsers()
         this.successHandler(`Usuário id:${user.id} inserido com sucesso!`)
       }
@@ -135,7 +139,7 @@ class Home extends Component {
       try {
         const payload = { ...user }
         const id = this.state.user.id
-        const data = await updateUser(id, payload)
+        const data = await this.usersService.updateUser(id, payload)
         await this.getAllUsers()
         this.successHandler(`Usuário id:${id} ${data.message}`)
       }
@@ -152,7 +156,7 @@ class Home extends Component {
   handleDeleteUser = (id) => {
     this.setState({ activeLoadingModal: true }, async () => {
       try {
-        await deleteUser(id)
+        await this.usersService.deleteUser(id)
         await this.getAllUsers()
         this.successHandler(`Usuário id:${id} deletado com sucesso`)
       }

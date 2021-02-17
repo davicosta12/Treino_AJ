@@ -8,7 +8,6 @@ const UsuariosForm = (props) => {
 	const { createMode, onChange } = props
 
 	const handleChange = () => {
-
 		onChange();
 	}
 

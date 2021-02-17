@@ -16,6 +16,7 @@ export default function CustomButton(props) {
   return (
     <div className={classes.root}>
       <Button
+        onClick={() => { props.onGetToken() }}
         variant={props.variant}
         color="primary"
       >

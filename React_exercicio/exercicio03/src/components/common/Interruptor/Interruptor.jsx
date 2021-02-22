@@ -108,14 +108,11 @@ const AntSwitch = withStyles((theme) => ({
 }))(Switch);
 
 export default function CustomizedSwitches(props) {
-  const { user, setUser, isStatus, isAdmin } = props;
+  const { name, value, onChange, } = props;
 
   const handleChange = (ev) => {
-    if (isAdmin)
-      setUser('', '', ev.target.checked)
-    if (isStatus)
-      setUser('', ev.target.checked, '')
-    console.log(user)
+    const { name, checked } = ev.target;
+    onChange({ target: { name, value: checked }});
   }
 
   return (
@@ -123,7 +120,7 @@ export default function CustomizedSwitches(props) {
       <Grid component="label" container alignItems="center" spacing={1}>
         <Grid item>Desativado</Grid>
         <Grid item>
-          <AntSwitch checked={isStatus ? user.status : user.isAdmin} onChange={handleChange} />
+          <AntSwitch checked={value} name={name} onChange={handleChange} />
         </Grid>
         <Grid item>Ativado</Grid>
       </Grid>

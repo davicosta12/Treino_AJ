@@ -5,10 +5,10 @@ import TextField from '@material-ui/core/TextField';
 import Interruptor from '../../common/Interruptor/Interruptor';
 
 const UsuariosForm = (props) => {
-	const { createMode, setUser, user } = props
+	const { createMode, user, onChange } = props
 
 	const handleChange = (ev) => {
-		setUser(ev.target.value);
+		onChange(ev);
 	}
 
 	return (
@@ -18,8 +18,8 @@ const UsuariosForm = (props) => {
 					onChange={handleChange}
 					disabled={!createMode}
 					placeholder={'Digite o usuário'}
-					id="name"
-					name="name"
+					id="usuario"
+					name="usuario"
 					label="Usuário"
 					size="small"
 					type='text'
@@ -33,17 +33,18 @@ const UsuariosForm = (props) => {
 			<h2>Admin</h2>
 			<div className="Interruptor">
 				<Interruptor
-					user={user}
-					setUser={setUser}
-					isAdmin={true}
+					name="isAdmin"
+					value={user.isAdmin}
+					onChange={handleChange}
+					
 				/>
 			</div>
 			<h2>Status</h2>
 			<div className="Interruptor">
 				<Interruptor
-					user={user}
-					setUser={setUser}
-					isStatus={true}
+					name="status"
+					value={user.status}
+					onChange ={handleChange}
 				/>
 			</div>
 		</div>

@@ -1,5 +1,5 @@
 import './table.css';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -18,8 +18,24 @@ const useStyles = makeStyles({
 });
 
 const Tabela = props => {
+  const [disableExcluir, setDisableExcluir] = useState([]);
   const { onClickDelete, onClickEdit, columns, items } = props
   const classes = useStyles();
+
+  useEffect(() => {
+    setDisableExcluir(Array(items.length).fill(false))
+  }, [items.length])
+
+  const handleDisableExcluir = (index, value) => {
+    const _disableExcluir = [...disableExcluir];
+    _disableExcluir[index] = value;
+    setDisableExcluir(_disableExcluir);
+  }
+
+  const handleBtnDelete = (id, index) => {
+    setDisableExcluir(() => handleDisableExcluir(index, true));
+    onClickDelete(id)
+  }
 
 
   return (
@@ -37,25 +53,27 @@ const Tabela = props => {
             {
               items.map((item, index) => (
                 <TableRow key={index}>
-                  {columns.map((col, i) => <TableCell key={i}> {item[col.name]}</TableCell>)}
+                  {columns.map((col, i) => <TableCell key={i}> {item.label[col.name]}</TableCell>)}
                   <TableCell>
                     <Fab
-                      onClick={() => {onClickDelete(item.usuario)}}
+                      onClick={() => { handleBtnDelete(item.obj, index) }}
                       variant="round"
                       title="Excluir"
                       size="small"
                       color="secondary"
                       iconDelet={true}
+                      disabled={disableExcluir && disableExcluir[index]}
                     />
                   </TableCell>
                   <TableCell>
                     <Fab
-                      onClick={() => {onClickEdit(item.usuario, item.status, item.isAdmin)}}
+                      onClick={() => { onClickEdit(item.obj, item.status, item.isAdmin) }}
                       variant="round"
                       title="Editar"
                       size="small"
                       color="primary"
                       iconEdit={true}
+                      disabled={disableExcluir && disableExcluir[index]}
                     />
                   </TableCell>
                 </TableRow>

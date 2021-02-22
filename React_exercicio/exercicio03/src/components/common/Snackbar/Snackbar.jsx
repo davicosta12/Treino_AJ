@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function CustomizedSnackbars(props) {
   const [open, setOpen] = React.useState(false);
-  const { activeShowbar, severityShowbar, showbarMessage, setShowbar } = props;
+  const { activeShowbar, severityShowbar, showbarMessage, onReset } = props;
   const classes = useStyles();
 
   const handleClick = () => {
@@ -26,7 +26,7 @@ export default function CustomizedSnackbars(props) {
   };
 
   const handleClose = (event, reason) => {
-    setShowbar()
+    onReset()
     setOpen(false);
   };
 

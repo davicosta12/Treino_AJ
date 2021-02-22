@@ -6,6 +6,7 @@ import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import Snackbar from '../common/Snackbar/Snackbar'
 import Button from '../common/Button';
+import checkValidation from '../../util/validacoes'
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -17,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const INITIAL_STATE = {
-	loginForm: {usuario: '', pass: ''},
+	loginForm: { usuario: '', pass: '' },
 	activeShowbar: false,
 	showbarMessage: '',
 	severityShowbar: '',
@@ -27,22 +28,22 @@ let authService = null;
 
 const LoginForm = (props) => {
 	const [state, setState] = useState(INITIAL_STATE);
-	const { activeShowbar, showbarMessage, severityShowbar, loginForm} = state;
+	const { activeShowbar, showbarMessage, severityShowbar, loginForm } = state;
 
 	useEffect(() => {
 		authService = new AuthService(localStorage.getItem('token'));
 	}, []);
 
-	const handleChange = ({ target: { name, value} }) => {
+	const handleChange = ({ target: { name, value } }) => {
 		setState({ ...state, loginForm: { ...loginForm, [name]: value } })
 		console.log(state)
 	}
 
-	const setShowbar = () => {
+	const handleResetSnackbar = () => {
 		setState({
-			setActiveShowbar: false,
-			setShowbarMessage: '',
-			setSeverityShowbar: ''
+			activeShowbar: false,
+			showbarMessage: '',
+			severityShowbar: ''
 		})
 	}
 
@@ -50,29 +51,40 @@ const LoginForm = (props) => {
 		console.error(err);
 		const defaultMessage = 'Ocorreu um erro ao processar as informações';
 		setState({
-			setActiveShowbar: true,
-			setShowbarMessage: `${message || defaultMessage}`,
-			setSeverityShowbar: `${severity}`
+			activeShowbar: true,
+			showbarMessage: `${message || defaultMessage}`,
+			severityShowbar: `${severity}`
 		})
 	}
 
+	const isNotvalidUser = user => {
+		console.log(user)
+    const { notValid, message } = checkValidation([...user])
+    if (notValid) {
+      setState({
+        activeShowbar: true,
+        showbarMessage: message,
+        severityShowbar: 'warning',
+      })
+      return true;
+    }
+    return false;
+  }
+
 	const handleGetToken = async () => {
-		const {usuario, pass} = loginForm;
-		console.log(typeof(usuario))
-		console.log(pass)
-		const payload = {
-			"branchId": 1,
-			"usuario": usuario,
-			"senha": pass  
-		}
 		try {
+			const { usuario, pass } = loginForm;
+			const payload = {
+				"branchId": 1,
+				"usuario": usuario,
+				"senha": pass
+			}
 			const token = await authService.getToken(payload);
 			localStorage.setItem('token', token)
 			props.history.push('/')
 			console.log(token);
 		}
 		catch (error) {
-			console.log(error.response)
 			console.log(error);
 		}
 		finally {
@@ -87,7 +99,7 @@ const LoginForm = (props) => {
 				activeShowbar={activeShowbar}
 				showbarMessage={showbarMessage}
 				severityShowbar={severityShowbar}
-				setShowbar={setShowbar}
+				onReset={handleResetSnackbar}
 			/>
 			<form className={classes.root} noValidate autoComplete="off">
 				<div>

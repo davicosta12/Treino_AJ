@@ -30,44 +30,43 @@ class UsuariosList extends Component {
     this.getListUsers();
   }
 
-  setUserUsuario = (usuario) => {
-    this.setState({ user: { ...this.state.user, usuario } });
+  handleChangeForm = ev => {
+    const { name, value } = ev.target;
+    this.setState({
+      user: {
+        ...this.state.user,
+        [name]: value,
+      }
+    })
   }
 
-  setUserStatus = (status) => {
-    this.setState({ user: { ...this.state.user, status } });
+  handleChangeStatus = ev => {
+    const { value } = ev.target;
+    this.setState({ user: { ...this.state.user, value} });
   }
 
-  setUserAdmin = (isAdmin) => {
-    this.setState({ user: { ...this.state.user, isAdmin } });
+  handleChangeAdmin = ev => {
+    const { checked } = ev.target;
+    this.setState({ user: { ...this.state.user, checked } });
   }
 
-  setUser = (usuario = '', status = '', isAdmin = '') => {
-    if (status === '' && isAdmin === '' ) {
-      this.setUserUsuario(usuario)
-      console.log(this.state.user)
-    }
+  handleChangeUser = (usuario = '', status = '', isAdmin = '') => {
+    if (status === '' && isAdmin === '')
+      this.handleChangeForm(usuario)
     if (status !== '' && isAdmin === '' && usuario === '')
-      this.setUserStatus(status)
+      this.handleChangeStatus(status)
     if (status === '' && isAdmin !== '' && usuario === '')
-      this.setUserAdmin(isAdmin)
+      this.handleChangeAdmin(isAdmin)
   }
 
-  handleEditBtn = (usuario, status, isAdmin) => {
-    if (status === "Sim" && isAdmin === "Sim") {
-      status = true;
-      isAdmin = true;
-    } else if (status === "Sim" && isAdmin === "Nao") {
-      status = true;
-      isAdmin = false;
-    } else if (status === "Nao" && isAdmin === "Sim") {
-      status = false;
-      isAdmin = true;
-    } else {
-      status = false;
-      isAdmin = false;
-    }
-    this.setState({ user: { ...this.state.user, usuario, status, isAdmin }, createMode: false, openModal: true })
+  handleEditBtn = (data) => {
+    const {usuario, status, isAdmin} = data;
+    console.log(status)
+    this.setState({
+      user: { ...this.state.user, usuario, status, isAdmin },
+      createMode: false,
+      openModal: true
+    })
   }
 
   handleAddBtn = () => {
@@ -78,13 +77,7 @@ class UsuariosList extends Component {
     return new Promise(async (resolve, reject) => {
       try {
         const users = await this.usersService.getListUsers();
-        const newUsers = users.map((user) => user)
-        newUsers.map((user) => {
-          user['status'] ? user['status'] = 'Sim' : user['status'] = 'Nao';
-          user['isAdmin'] ? user['isAdmin'] = 'Sim' : user['isAdmin'] = 'Nao';
-        })
-        this.setState({ users: newUsers }, () => { resolve() });
-        console.log(newUsers)
+        this.setState({ users }, () => { resolve() });
       }
       catch (error) {
         this.errorHandler(error, 'error')
@@ -140,12 +133,12 @@ class UsuariosList extends Component {
     })
   }
 
-  handleDeleteUser = async (id) => {
+  handleDeleteUser = async (data) => {
     this.setState({ activeLoading: true }, async () => {
       try {
-        await this.usersService.deleteUser(id)
+        await this.usersService.deleteUser(data.usuario)
         await this.getListUsers()
-        this.successHandler(`${id} deletado com sucesso!`)
+        this.successHandler(`${data.usuario} deletado com sucesso!`)
       }
       catch (error) {
         this.errorHandler(error, 'error')
@@ -165,7 +158,7 @@ class UsuariosList extends Component {
     this.setState({ openModal: true })
   }
 
-  setShowbar = () => {
+  handleResetSnackbar = () => {
     this.setState({
       activeShowbar: false,
       showbarMessage: '',
@@ -193,6 +186,7 @@ class UsuariosList extends Component {
   }
 
   isNotvalidUser = user => {
+    console.log(user)
     const { notValid, message } = checkValidation([...user])
     if (notValid) {
       this.setState({
@@ -213,11 +207,18 @@ class UsuariosList extends Component {
         activeShowbar={activeShowbar}
         showbarMessage={showbarMessage}
         severityShowbar={severityShowbar}
-        setShowbar={this.setShowbar}
+        onReset={this.handleResetSnackbar}
       />
 
       <Tabela
-        items={users}
+        items={users.map(user => Object.assign({
+          obj: { ...user },
+          label: {
+            usuario: user.usuario,
+            isAdmin: user.isAdmin ? 'Sim' : 'Não',
+            status: user.status ? 'Sim' : 'Não',
+          }
+        }))}
         columns={[
           { name: 'usuario', label: 'Usuário' },
           { name: 'isAdmin', label: 'Admin' },
@@ -239,7 +240,7 @@ class UsuariosList extends Component {
       >
         <UsuariosForm
           user={user}
-          setUser={this.setUser}
+          onChange={this.handleChangeUser}
           createMode={createMode}
         />
       </Modal>

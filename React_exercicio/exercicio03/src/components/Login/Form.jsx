@@ -6,7 +6,6 @@ import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import Snackbar from '../common/Snackbar/Snackbar'
 import Button from '../common/Button';
-import checkValidation from '../../util/validacoes'
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -41,6 +40,7 @@ const LoginForm = (props) => {
 
 	const handleResetSnackbar = () => {
 		setState({
+			...state,
 			activeShowbar: false,
 			showbarMessage: '',
 			severityShowbar: ''
@@ -51,25 +51,12 @@ const LoginForm = (props) => {
 		console.error(err);
 		const defaultMessage = 'Ocorreu um erro ao processar as informações';
 		setState({
+			...state,
 			activeShowbar: true,
 			showbarMessage: `${message || defaultMessage}`,
 			severityShowbar: `${severity}`
 		})
 	}
-
-	const isNotvalidUser = user => {
-		console.log(user)
-    const { notValid, message } = checkValidation([...user])
-    if (notValid) {
-      setState({
-        activeShowbar: true,
-        showbarMessage: message,
-        severityShowbar: 'warning',
-      })
-      return true;
-    }
-    return false;
-  }
 
 	const handleGetToken = async () => {
 		try {
@@ -85,7 +72,16 @@ const LoginForm = (props) => {
 			console.log(token);
 		}
 		catch (error) {
+			if (error.response.status === 401)
+				errorHandler(error, 'warning', "Login incorreto!")
+			else if (error.response.status === 400)
+				errorHandler(error, 'warning', "campo(s) vazios!")
+			else if (error.response?.data?.mensagem)
+				errorHandler(error, 'error', error.response.data.mensagem)
+			else
+				errorHandler(error, 'error')
 			console.log(error);
+			console.log(error.response)
 		}
 		finally {
 			console.log("finally")

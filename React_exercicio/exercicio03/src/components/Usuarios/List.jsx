@@ -216,7 +216,7 @@ class UsuariosList extends Component {
           label: {
             usuario: user.usuario,
             isAdmin: user.isAdmin ? 'Sim' : 'Não',
-            status: user.status ? 'Sim' : 'Não',
+            status: user.status ? 'Ativo' : 'Inativo',
           }
         }))}
         columns={[

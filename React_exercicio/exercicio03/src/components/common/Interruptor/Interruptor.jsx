@@ -107,23 +107,23 @@ const AntSwitch = withStyles((theme) => ({
   checked: {},
 }))(Switch);
 
-export default function CustomizedSwitches() {
-  const [state, setState] = React.useState({
-    checkedA: true,
-    checkedB: true,
-    checkedC: true,
-  });
+export default function CustomizedSwitches(props) {
+  const { user, setUser, isStatus, isAdmin } = props;
 
-  const handleChange = (event) => {
-    setState({ ...state, [event.target.name]: event.target.checked });
-  };
+  const handleChange = (ev) => {
+    if (isAdmin)
+      setUser('', '', ev.target.checked)
+    if (isStatus)
+      setUser('', ev.target.checked, '')
+    console.log(user)
+  }
 
   return (
     <Typography component="div">
       <Grid component="label" container alignItems="center" spacing={1}>
         <Grid item>Desativado</Grid>
         <Grid item>
-          <AntSwitch checked={state.checkedC} onChange={handleChange} name="checkedC" />
+          <AntSwitch checked={isStatus ? user.status : user.isAdmin} onChange={handleChange} />
         </Grid>
         <Grid item>Ativado</Grid>
       </Grid>

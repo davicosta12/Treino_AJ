@@ -16,48 +16,63 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
+const INITIAL_STATE = {
+	loginForm: {usuario: '', pass: ''},
+	activeShowbar: false,
+	showbarMessage: '',
+	severityShowbar: '',
+}
+
+let authService = null;
+
 const LoginForm = (props) => {
-	const [activeShowbar, setActiveShowbar] = useState(false);
-	const [showbarMessage, setMessage] = useState('');
-	const [severityShowbar, setSeverity] = useState('');
+	const [state, setState] = useState(INITIAL_STATE);
+	const { activeShowbar, showbarMessage, severityShowbar, loginForm} = state;
 
 	useEffect(() => {
-		new AuthService(localStorage.getItem('token'));
+		authService = new AuthService(localStorage.getItem('token'));
 	}, []);
 
+	const handleChange = ({ target: { name, value} }) => {
+		setState({ ...state, loginForm: { ...loginForm, [name]: value } })
+		console.log(state)
+	}
+
 	const setShowbar = () => {
-		setActiveShowbar(false);
-		setMessage('');
-		setSeverity('');
+		setState({
+			setActiveShowbar: false,
+			setShowbarMessage: '',
+			setSeverityShowbar: ''
+		})
 	}
 
 	const errorHandler = (err, severity, message = null) => {
 		console.error(err);
 		const defaultMessage = 'Ocorreu um erro ao processar as informações';
-		setActiveShowbar(true);
-		setMessage(`${message || defaultMessage}`);
-		setSeverity(`${severity}`);
+		setState({
+			setActiveShowbar: true,
+			setShowbarMessage: `${message || defaultMessage}`,
+			setSeverityShowbar: `${severity}`
+		})
 	}
 
 	const handleGetToken = async () => {
+		const {usuario, pass} = loginForm;
+		console.log(typeof(usuario))
+		console.log(pass)
 		const payload = {
 			"branchId": 1,
-			"usuario": "david",
-			"senha": "123abc"
+			"usuario": usuario,
+			"senha": pass  
 		}
 		try {
-			const token = await new AuthService().getToken(payload);
+			const token = await authService.getToken(payload);
 			localStorage.setItem('token', token)
 			props.history.push('/')
 			console.log(token);
 		}
 		catch (error) {
-			if (error.status === 401)
-				errorHandler(error, 'error', 'As credenciais informadas estão incorretas')
-			else if (error.response?.data?.message)
-				errorHandler(error, 'error', error.response.data.message)
-			else
-				errorHandler(error, 'error')
+			console.log(error.response)
 			console.log(error);
 		}
 		finally {
@@ -71,33 +86,39 @@ const LoginForm = (props) => {
 			<Snackbar
 				activeShowbar={activeShowbar}
 				showbarMessage={showbarMessage}
-				severity={severityShowbar}
+				severityShowbar={severityShowbar}
 				setShowbar={setShowbar}
 			/>
 			<form className={classes.root} noValidate autoComplete="off">
 				<div>
 					<TextField
+						onChange={handleChange}
+						name="usuario"
 						id="standard-name-input"
 						label="Usuário"
 						type="text"
 						variant="filled"
+						value={loginForm.usuario}
 					/>
 				</div>
 				<div>
 					<TextField
+						onChange={handleChange}
+						name="pass"
 						id="filled-password-input"
 						label="Senha"
 						type="password"
 						autoComplete="current-password"
 						variant="filled"
+						value={loginForm.pass}
 					/>
 				</div>
 				<Button
-					onGetToken={handleGetToken}
+					onClick={handleGetToken}
 					variant="contained"
 					label="Entrar"
 				/>
-				
+
 			</form>
 		</div>
 

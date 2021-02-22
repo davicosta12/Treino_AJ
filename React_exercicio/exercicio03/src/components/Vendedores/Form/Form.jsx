@@ -14,21 +14,9 @@ const VendedoresForm = (props) => {
 
 	return (
 		<div className="form">
-			<div className="form-div-codigo">
-				<TextField
-					disabled={!createMode}
-					placeholder={'Digite o código'}
-					id="id"
-					name="id"
-					label="Código"
-					size="small"
-					type="text"
-					variant="standard"
-					margin="normal"
-				/>
-			</div>
 			<div>
 				<TextField
+					disabled={!createMode}
 					placeholder={'Digite o usuário'}
 					id="name"
 					name="name"

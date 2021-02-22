@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function CustomizedSnackbars(props) {
   const [open, setOpen] = React.useState(false);
-  const { activeShowbar, severity, showbarMessage, setShowbar } = props;
+  const { activeShowbar, severityShowbar, showbarMessage, setShowbar } = props;
   const classes = useStyles();
 
   const handleClick = () => {
@@ -38,7 +38,7 @@ export default function CustomizedSnackbars(props) {
   return (
     <div className={classes.root}>
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity={severity}>
+        <Alert onClose={handleClose} severity={severityShowbar}>
           {showbarMessage}
         </Alert>
       </Snackbar>

@@ -5,3 +5,13 @@
 .form-div-codigo {
     width: 100%;
 }
+
+h2 {
+  margin: .5em 0;
+  font-weight: 400;
+  color: rgb(133, 131, 131);
+}
+
+div.Interruptor {
+    margin: 1em 0;
+}

@@ -5,6 +5,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import Slide from '@material-ui/core/Slide';
+import Loading from '../Loading/Loading'
 
 import Fab from '../../common/Fab';
 
@@ -16,8 +17,12 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const Modal = (props) => {
 
   const {
-    open, onClose, onConfirm, title, confirmBtnTitle, confirmBtnLabel,
+    open, onClose, onConfirm, title, confirmBtnTitle, confirmBtnLabel, activeLoadingModal
   } = props;
+
+  const hadleConfirm = () => {
+    onConfirm();
+  }
 
   return (
     <Dialog
@@ -30,34 +35,35 @@ const Modal = (props) => {
       aria-describedby="alert-dialog-slide-description"
     >
       <DialogTitle id="alert-dialog-title" className="title">
-        { title }
+        {title}
       </DialogTitle>
       <DialogContent>
-        { props.children }
+        {props.children}
       </DialogContent>
       <DialogActions>
-				<div className="btnsModal">
-					<Fab
-						onClick={onClose}
-						variant="extended"
-						title="Fechar"
-						size="small"
-						textComponent="Fechar"
-						color="secondary"
-						iconClose={true}
-					/>
-					<Fab
-            onClick={onConfirm}
-						variant="extended"
-						title={confirmBtnTitle}
-						size="small"
-						label={confirmBtnLabel}
-						textComponent={confirmBtnTitle}
-						color="primary"
-						iconCheck={true}
-					/>
-				</div>
+        <div className="btnsModal">
+          <Fab
+            onClick={onClose}
+            variant="extended"
+            title="Fechar"
+            size="small"
+            textComponent="Fechar"
+            color="secondary"
+            iconClose={true}
+          />
+          <Fab
+            onClick={hadleConfirm}
+            variant="extended"
+            title={confirmBtnTitle}
+            size="small"
+            label={confirmBtnLabel}
+            textComponent={confirmBtnTitle}
+            color="primary"
+            iconCheck={true}
+          />
+        </div>
       </DialogActions>
+      <Loading activeLoading={activeLoadingModal} />
     </Dialog>
   );
 }

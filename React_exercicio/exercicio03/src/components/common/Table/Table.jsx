@@ -18,8 +18,9 @@ const useStyles = makeStyles({
 });
 
 const Tabela = props => {
-  const { onClickEdit, columns } = props
+  const { onClickDelete, onClickEdit, columns, items } = props
   const classes = useStyles();
+
 
   return (
     <React.Fragment>
@@ -27,36 +28,39 @@ const Tabela = props => {
         <Table className={classes.table} size="small" aria-label="a dense table">
           <TableHead>
             <TableRow>
-              {columns.map((col, i) => <TableCell key={i}> {col} </TableCell>)}
+              {columns.map((col, i) => <TableCell key={i}> {col.label} </TableCell>)}
               <TableCell></TableCell>
               <TableCell></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            <TableRow>
-              <TableCell> 2 </TableCell>
-              <TableCell> Davi </TableCell>
-              <TableCell> Sim </TableCell>
-              <TableCell>
-                <Fab
-                  variant="round"
-                  title="Excluir"
-                  size="small"
-                  color="secondary"
-                  iconDelet={true}
-                />
-              </TableCell>
-              <TableCell>
-                <Fab
-                  onClick={onClickEdit}
-                  variant="round"
-                  title="Editar"
-                  size="small"
-                  color="primary"
-                  iconEdit={true}
-                />
-              </TableCell>
-            </TableRow>
+            {
+              items.map((item, index) => (
+                <TableRow key={index}>
+                  {columns.map((col, i) => <TableCell key={i}> {item[col.name]}</TableCell>)}
+                  <TableCell>
+                    <Fab
+                      onClick={() => {onClickDelete(item.usuario)}}
+                      variant="round"
+                      title="Excluir"
+                      size="small"
+                      color="secondary"
+                      iconDelet={true}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <Fab
+                      onClick={() => {onClickEdit(item.usuario, item.status, item.isAdmin)}}
+                      variant="round"
+                      title="Editar"
+                      size="small"
+                      color="primary"
+                      iconEdit={true}
+                    />
+                  </TableCell>
+                </TableRow>
+              ))
+            }
           </TableBody>
         </Table>
       </TableContainer>

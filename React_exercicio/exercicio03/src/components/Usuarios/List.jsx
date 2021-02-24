@@ -15,8 +15,8 @@ const INITIAL_STATE = {
   openModal: false,
   createMode: false,
   activeLoading: false,
-  activeLoadingModal: false,
   activeShowbar: false,
+  showBtnEdit: true,
   showbarMessage: '',
   severityShowbar: '',
 }
@@ -27,50 +27,9 @@ class UsuariosList extends Component {
 
   componentDidMount() {
     this.usersService = new UsersService(localStorage.getItem('token'));
-    this.getListUsers();
-  }
-
-  handleChangeForm = ev => {
-    const { name, value } = ev.target;
-    this.setState({
-      user: {
-        ...this.state.user,
-        [name]: value,
-      }
-    })
-  }
-
-  handleChangeStatus = ev => {
-    const { value } = ev.target;
-    this.setState({ user: { ...this.state.user, value} });
-  }
-
-  handleChangeAdmin = ev => {
-    const { checked } = ev.target;
-    this.setState({ user: { ...this.state.user, checked } });
-  }
-
-  handleChangeUser = (usuario = '', status = '', isAdmin = '') => {
-    if (status === '' && isAdmin === '')
-      this.handleChangeForm(usuario)
-    if (status !== '' && isAdmin === '' && usuario === '')
-      this.handleChangeStatus(status)
-    if (status === '' && isAdmin !== '' && usuario === '')
-      this.handleChangeAdmin(isAdmin)
-  }
-
-  handleEditBtn = (data) => {
-    const {usuario, status, isAdmin} = data;
-    console.log(status)
-    this.setState({
-      user: { ...this.state.user, usuario, status, isAdmin },
-      createMode: false,
-      openModal: true
-    })
-  }
-
-  handleAddBtn = () => {
-    this.setState({ createMode: true, openModal: true, user: { ...INITIAL_STATE.user } })
+    this.setState({ activeLoading: true }, async () => {
+      await this.getListUsers()
+    });
   }
 
   getListUsers = () => {
@@ -84,14 +43,14 @@ class UsuariosList extends Component {
         reject(error);
       }
       finally {
-        console.log("finally")
+        this.setState({ activeLoading: false })
       }
     })
   }
 
   handleCreateUser = () => {
     if (this.isNotvalidUser(this.state.user.usuario)) return;
-    this.setState({ activeLoadingModal: true }, async () => {
+    this.setState({ activeLoading: true, openModal: false }, async () => {
       try {
         const payload = { ...this.state.user }
         const response = await this.usersService.createUser(payload)
@@ -106,18 +65,16 @@ class UsuariosList extends Component {
         console.log(error)
       }
       finally {
-        this.setState({ activeLoadingModal: false, openModal: false })
-
+        this.setState({ activeLoading: false })
       }
     })
   }
 
   handleUpdateUser = () => {
-    this.setState({ activeLoadingModal: true }, async () => {
+    this.setState({ activeLoading: true, openModal: false }, async () => {
       try {
         const payload = { ...this.state.user }
         const response = await this.usersService.updateUser(payload)
-        console.log(response)
         await this.getListUsers()
         this.successHandler(response.mensagem)
       }
@@ -128,7 +85,7 @@ class UsuariosList extends Component {
           this.errorHandler(error, 'error')
       }
       finally {
-        this.setState({ activeLoadingModal: false, openModal: false })
+        this.setState({ activeLoading: false })
       }
     })
   }
@@ -148,6 +105,29 @@ class UsuariosList extends Component {
         this.setState({ activeLoading: false, openModal: false })
       }
     })
+  }
+
+  handleChangeForm = ev => {
+    const { name, value } = ev.target;
+    this.setState({
+      user: {
+        ...this.state.user,
+        [name]: value,
+      }
+    })
+  }
+
+  handleEditBtn = (data) => {
+    const { usuario, status, isAdmin } = data;
+    this.setState({
+      user: { ...this.state.user, usuario, status, isAdmin },
+      createMode: false,
+      openModal: true
+    })
+  }
+
+  handleAddBtn = () => {
+    this.setState({ createMode: true, openModal: true, user: { ...INITIAL_STATE.user } })
   }
 
   handleCloseModal = () => {
@@ -200,8 +180,8 @@ class UsuariosList extends Component {
   }
 
   render() {
-    const { activeLoading, activeLoadingModal, openModal,
-      createMode, user, users, activeShowbar, showbarMessage, severityShowbar } = this.state;
+    const { activeLoading, openModal,
+      createMode, user, users, activeShowbar, showbarMessage, severityShowbar, showBtnEdit } = this.state;
     return <>
       <Snackbar
         activeShowbar={activeShowbar}
@@ -224,6 +204,7 @@ class UsuariosList extends Component {
           { name: 'isAdmin', label: 'Admin' },
           { name: 'status', label: 'Ativo' },
         ]}
+        showBtnEdit={showBtnEdit}
         onClickDelete={this.handleDeleteUser}
         onClickEdit={this.handleEditBtn}
       />
@@ -236,11 +217,10 @@ class UsuariosList extends Component {
         createMode={createMode}
         confirmBtnTitle='Confirmar'
         confirmBtnLabel='edit'
-        activeLoadingModal={activeLoadingModal}
       >
         <UsuariosForm
           user={user}
-          onChange={this.handleChangeUser}
+          onChange={this.handleChangeForm}
           createMode={createMode}
         />
       </Modal>
@@ -258,6 +238,7 @@ class UsuariosList extends Component {
       </div>
 
       <Loading
+        className={Loading}
         activeLoading={activeLoading}
       />
     </>

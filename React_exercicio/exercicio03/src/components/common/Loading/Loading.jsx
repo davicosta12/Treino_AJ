@@ -20,7 +20,7 @@ const CircularIndeterminate = (props) => {
   const { activeLoading } = props;
   return (
     <div className={classes.root} >
-      { activeLoading && <CircularProgress className={classes.stylesLoading} />}
+      { activeLoading && <CircularProgress className={classes.stylesLoading} size={80} />}
     </div>
   );
 }

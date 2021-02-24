@@ -19,7 +19,7 @@ const useStyles = makeStyles({
 
 const Tabela = props => {
   const [disableExcluir, setDisableExcluir] = useState([]);
-  const { onClickDelete, onClickEdit, columns, items } = props
+  const { onClickDelete, onClickEdit, columns, items, showBtnEdit } = props
   const classes = useStyles();
 
   useEffect(() => {
@@ -65,9 +65,9 @@ const Tabela = props => {
                       disabled={disableExcluir && disableExcluir[index]}
                     />
                   </TableCell>
-                  <TableCell>
+                  { showBtnEdit && <TableCell>
                     <Fab
-                      onClick={() => { onClickEdit(item.obj, item.status, item.isAdmin) }}
+                      onClick={() => { onClickEdit(item.obj) }}
                       variant="round"
                       title="Editar"
                       size="small"
@@ -75,7 +75,7 @@ const Tabela = props => {
                       iconEdit={true}
                       disabled={disableExcluir && disableExcluir[index]}
                     />
-                  </TableCell>
+                  </TableCell>}
                 </TableRow>
               ))
             }

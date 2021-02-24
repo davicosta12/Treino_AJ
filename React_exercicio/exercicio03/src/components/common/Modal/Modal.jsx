@@ -17,7 +17,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const Modal = (props) => {
 
   const {
-    open, onClose, onConfirm, title, confirmBtnTitle, confirmBtnLabel, activeLoadingModal
+    open, onClose, onConfirm, title, confirmBtnTitle, confirmBtnLabel,
   } = props;
 
   const hadleConfirm = () => {
@@ -63,7 +63,6 @@ const Modal = (props) => {
           />
         </div>
       </DialogActions>
-      <Loading activeLoading={activeLoadingModal} />
     </Dialog>
   );
 }

@@ -1,5 +1,4 @@
 const checkValidation = ($value_inputs) => {
-  console.log($value_inputs)
   if ($value_inputs.length === 0) {
     const message = "Existe(m) campo(s) vazio(s)"
     return { notValid: true, message };

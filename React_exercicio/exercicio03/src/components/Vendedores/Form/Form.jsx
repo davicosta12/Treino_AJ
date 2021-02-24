@@ -5,21 +5,22 @@ import TextField from '@material-ui/core/TextField';
 import Interruptor from '../../common/Interruptor/Interruptor';
 
 const VendedoresForm = (props) => {
-	const { createMode, onChange } = props
+	const { seller, createMode, onChange } = props
 
-	const handleChange = () => {
-
-		onChange();
+	const handleChange = (ev) => {
+		onChange(ev);
 	}
 
 	return (
 		<div className="form">
 			<div>
 				<TextField
+					onChange={handleChange}
 					disabled={!createMode}
 					placeholder={'Digite o usuário'}
 					id="name"
-					name="name"
+					name="nome"
+					value={seller.nome}
 					label="Usuário"
 					size="small"
 					type='text'
@@ -29,8 +30,9 @@ const VendedoresForm = (props) => {
 					fullWidth
 				/>
 			</div>
+			<h2>Status</h2>
 			<div className="Interruptor">
-				<Interruptor />
+				<Interruptor name={'inativo'} value={seller.inativo} onChange={handleChange} />
 			</div>
 		</div>
 	);

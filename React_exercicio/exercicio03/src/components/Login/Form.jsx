@@ -30,12 +30,11 @@ const LoginForm = (props) => {
 	const { activeShowbar, showbarMessage, severityShowbar, loginForm } = state;
 
 	useEffect(() => {
-		authService = new AuthService(localStorage.getItem('token'));
+		authService = new AuthService();
 	}, []);
 
 	const handleChange = ({ target: { name, value } }) => {
 		setState({ ...state, loginForm: { ...loginForm, [name]: value } })
-		console.log(state)
 	}
 
 	const handleResetSnackbar = () => {
